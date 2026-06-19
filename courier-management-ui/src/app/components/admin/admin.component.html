@@ -1,0 +1,395 @@
+<app-navbar />
+<div class="min-h-screen bg-background pt-32 pb-20 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-16 animate-slide-up">
+      <div>
+        <h1 class="text-4xl font-bold text-white tracking-tighter uppercase mb-4">Command Center</h1>
+        <p class="text-neutral/40 text-sm font-medium uppercase tracking-widest">Global logistics oversight and system management.</p>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="flex bg-white/5 p-1 rounded-2xl border border-white/5">
+        <button (click)="setTab('dashboard')" [class.bg-primary]="activeTab === 'dashboard'" [class.text-black]="activeTab === 'dashboard'" class="px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Overview</button>
+        <button (click)="setTab('shipments')" [class.bg-primary]="activeTab === 'shipments'" [class.text-black]="activeTab === 'shipments'" class="px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Shipments</button>
+        <button (click)="setTab('users')" [class.bg-primary]="activeTab === 'users'" [class.text-black]="activeTab === 'users'" class="px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Users</button>
+        <button (click)="setTab('reports')" [class.bg-primary]="activeTab === 'reports'" [class.text-black]="activeTab === 'reports'" class="px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Reports</button>
+        <button (click)="exportAllShipments()" class="ml-4 px-6 py-3 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border border-green-500/20">Export All CSV</button>
+      </div>
+    </div>
+
+    <!-- Dashboard Overview -->
+    <div *ngIf="activeTab === 'dashboard'" class="space-y-12 animate-slide-up">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="blink-card p-8 bg-surface-dim/50 border-white/5">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Total Deliveries</p>
+          <div class="flex items-end justify-between">
+            <p class="text-5xl font-bold text-white tracking-tighter">{{ stats.total }}</p>
+            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/20">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="blink-card p-8 bg-surface-dim/50 border-primary/20">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">In Transit</p>
+          <div class="flex items-end justify-between">
+            <p class="text-5xl font-bold text-primary tracking-tighter">{{ stats.inTransit }}</p>
+            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="blink-card p-8 bg-surface-dim/50 border-green-500/20">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Delivered</p>
+          <div class="flex items-end justify-between">
+            <p class="text-5xl font-bold text-green-500 tracking-tighter">{{ stats.delivered }}</p>
+            <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="blink-card p-8 bg-surface-dim/50 border-white/5">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Success Rate</p>
+          <div class="flex items-end justify-between">
+            <p class="text-5xl font-bold text-white tracking-tighter">{{ stats.successRate | number:'1.2-2' }}<span class="text-lg ml-1 opacity-40">%</span></p>
+            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/40 font-black text-xl">
+              %
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lifecycle Distribution -->
+      <section>
+        <h3 class="text-xs font-bold text-neutral/40 uppercase tracking-[0.4em] mb-8 text-center">Lifecycle Distribution</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.draft }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Draft</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.booked }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Booked</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.packed }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Packed</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.dispatched }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Dispatched</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.pickedUp }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Picked Up</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.inTransit }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">In Transit</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-white">{{ distribution.outForDelivery }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Out For Delivery</p>
+          </div>
+          <div class="blink-card p-4 text-center bg-surface-dim/30">
+            <p class="text-xl font-bold text-green-500">{{ distribution.delivered }}</p>
+            <p class="text-[7px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Delivered</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Activity Section -->
+      <section class="mt-12">
+        <h3 class="text-xs font-bold text-neutral/40 uppercase tracking-[0.4em] mb-8">Recent Activity</h3>
+        <div class="blink-card bg-surface-dim/30 overflow-hidden">
+          <div *ngFor="let act of recentActivities" class="p-6 border-b border-white/5 flex items-center justify-between hover:bg-white/5 transition-colors">
+            <div class="flex items-center gap-6">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm text-white font-bold tracking-tight">Shipment #{{ act.id }} updated to <span class="text-primary">{{ act.status }}</span></p>
+                <p class="text-[8px] text-neutral/40 uppercase font-bold mt-1">Triggered by {{ act.user }} • {{ act.date | date:'medium' }}</p>
+              </div>
+            </div>
+            <button (click)="setTab('shipments')" class="text-[8px] font-bold text-white/20 uppercase tracking-widest hover:text-white transition-all">Details ➜</button>
+          </div>
+          <div *ngIf="recentActivities.length === 0" class="p-12 text-center text-neutral/40 text-[10px] font-bold uppercase tracking-widest">No recent activities found.</div>
+        </div>
+      </section>
+
+      <!-- Exception Handling Status -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="blink-card p-8 flex flex-col items-center justify-center text-center">
+          <div class="w-12 h-12 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p class="text-3xl font-bold text-white">{{ distribution.delayed }}</p>
+          <p class="text-[8px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Delayed</p>
+        </div>
+        <div class="blink-card p-8 flex flex-col items-center justify-center text-center">
+          <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p class="text-3xl font-bold text-white">{{ distribution.failed }}</p>
+          <p class="text-[8px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Failed</p>
+        </div>
+        <div class="blink-card p-8 flex flex-col items-center justify-center text-center">
+          <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-500 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
+            </svg>
+          </div>
+          <p class="text-3xl font-bold text-white">{{ distribution.returned }}</p>
+          <p class="text-[8px] font-bold text-neutral/40 uppercase tracking-widest mt-1">Returned</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipment Management -->
+    <div *ngIf="activeTab === 'shipments'" class="animate-slide-up space-y-8">
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-4 items-end">
+        <div class="flex-1 min-w-[200px]">
+          <label class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2 block">Status Filter</label>
+          <select [(ngModel)]="filterStatus" (change)="applyFilters()" class="premium-input py-3">
+            <option value="">ALL STATUSES</option>
+            <option value="DRAFT">DRAFT</option>
+            <option value="BOOKED">BOOKED</option>
+            <option value="PACKED">PACKED</option>
+            <option value="DISPATCHED">DISPATCHED</option>
+            <option value="PICKED_UP">PICKED UP</option>
+            <option value="IN_TRANSIT">IN TRANSIT</option>
+            <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
+            <option value="DELIVERED">DELIVERED</option>
+            <option value="DELAYED">DELAYED</option>
+            <option value="FAILED">FAILED</option>
+            <option value="RETURNED">RETURNED</option>
+          </select>
+        </div>
+        <div class="flex-1 min-w-[200px]">
+          <label class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2 block">Date Filter</label>
+          <input type="date" [(ngModel)]="filterDate" (change)="applyFilters()" class="premium-input py-3">
+        </div>
+        <button (click)="filterStatus = ''; filterDate = ''; applyFilters()" class="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Reset</button>
+      </div>
+
+      <div class="blink-card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-white/5">
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Shipment ID</th>
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Sender / Receiver</th>
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Status</th>
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              <tr *ngFor="let s of filteredShipments" class="hover:bg-white/5 transition-colors">
+                <td class="p-6">
+                  <p class="text-white font-bold tracking-tighter">#{{ s.id }}</p>
+                  <p class="text-[8px] text-neutral/40 uppercase font-bold">{{ s.createdAt | date:'shortDate' }}</p>
+                </td>
+                <td class="p-6">
+                  <div class="flex items-center gap-4">
+                    <div class="text-xs">
+                      <p class="text-white font-medium uppercase tracking-tight">{{ s.sender?.name }}</p>
+                      <div class="flex items-center gap-2 my-1">
+                        <div class="h-[1px] flex-1 bg-white/5"></div>
+                        <p class="text-[10px] text-primary">➜</p>
+                        <div class="h-[1px] flex-1 bg-white/5"></div>
+                      </div>
+                      <p class="text-white font-medium uppercase tracking-tight">{{ s.receiver?.name }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-6">
+                  <span [class.bg-green-500/10]="s.status === 'DELIVERED'" [class.text-green-500]="s.status === 'DELIVERED'"
+                        [class.bg-primary/10]="s.status === 'IN_TRANSIT' || s.status === 'PICKED_UP' || s.status === 'BOOKED'" [class.text-primary]="s.status === 'IN_TRANSIT' || s.status === 'PICKED_UP' || s.status === 'BOOKED'"
+                        [class.bg-yellow-500/10]="s.status === 'DELAYED' || s.status === 'OUT_FOR_DELIVERY'" [class.text-yellow-500]="s.status === 'DELAYED' || s.status === 'OUT_FOR_DELIVERY'"
+                        [class.bg-red-500/10]="s.status === 'FAILED' || s.status === 'RETURNED'" [class.text-red-500]="s.status === 'FAILED' || s.status === 'RETURNED'"
+                        class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
+                    {{ s.status }}
+                  </span>
+                </td>
+                <td class="p-6 whitespace-nowrap">
+                  <div class="flex items-center gap-3">
+                    <select (change)="updateStatus(s.id, statusSelect.value)" #statusSelect class="bg-surface-dim border border-white/5 text-[10px] font-bold text-white rounded-lg px-3 py-2 uppercase tracking-widest">
+                      <option value="DRAFT" [selected]="s.status === 'DRAFT'">DRAFT</option>
+                      <option value="BOOKED" [selected]="s.status === 'BOOKED'">BOOKED</option>
+                      <option value="PACKED" [selected]="s.status === 'PACKED'">PACKED</option>
+                      <option value="DISPATCHED" [selected]="s.status === 'DISPATCHED'">DISPATCHED</option>
+                      <option value="PICKED_UP" [selected]="s.status === 'PICKED_UP'">PICKED UP</option>
+                      <option value="IN_TRANSIT" [selected]="s.status === 'IN_TRANSIT'">IN TRANSIT</option>
+                      <option value="OUT_FOR_DELIVERY" [selected]="s.status === 'OUT_FOR_DELIVERY'">OUT FOR DELIVERY</option>
+                      <option value="DELIVERED" [selected]="s.status === 'DELIVERED'">DELIVERED</option>
+                      <option value="DELAYED" [selected]="s.status === 'DELAYED'">DELAYED</option>
+                      <option value="FAILED" [selected]="s.status === 'FAILED'">FAILED</option>
+                      <option value="RETURNED" [selected]="s.status === 'RETURNED'">RETURNED</option>
+                    </select>
+                    <button (click)="downloadInvoice(s.id)" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40 hover:text-white transition-all" title="Download Invoice">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                      </svg>
+                    </button>
+                    <label class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40 hover:text-white transition-all cursor-pointer" title="Upload Document">
+                      <input type="file" class="hidden" (change)="onFileSelected($event, s.id)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                    </label>
+                    <button *ngIf="s.status === 'DELAYED' || s.status === 'FAILED'" (click)="resolveIssue(s.id)" class="px-4 py-2 bg-primary text-black rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all">Resolve</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="filteredShipments.length === 0 && !loading" class="p-20 text-center text-neutral/40 uppercase font-bold tracking-[0.4em] text-[10px]">
+            No shipments match your filters.
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- User Management -->
+    <div *ngIf="activeTab === 'users'" class="animate-slide-up">
+      <div class="blink-card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-white/5">
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">User</th>
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Email</th>
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Role</th>
+                <th class="p-6 text-[10px] font-bold text-neutral/40 uppercase tracking-widest">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              <tr *ngFor="let u of users" class="hover:bg-white/5 transition-colors">
+                <td class="p-6">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary font-bold text-sm">
+                      {{ u.username.charAt(0).toUpperCase() }}
+                    </div>
+                    <p class="text-white font-bold uppercase tracking-tight">{{ u.username }}</p>
+                  </div>
+                </td>
+                <td class="p-6 text-subtext text-xs">{{ u.email }}</td>
+                <td class="p-6">
+                  <span [class.bg-primary/20]="u.role === 'ADMIN'" [class.text-primary]="u.role === 'ADMIN'"
+                        [class.bg-white/5]="u.role !== 'ADMIN'" [class.text-white/40]="u.role !== 'ADMIN'"
+                        class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest">
+                    {{ u.role }}
+                  </span>
+                </td>
+                <td class="p-6">
+                  <button class="text-[10px] font-bold text-red-500 uppercase tracking-widest hover:underline">Deactivate</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div *ngIf="activeTab === 'reports' && reports" class="animate-slide-up space-y-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="blink-card p-10 text-center">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Performance Score</p>
+          <p class="text-6xl font-bold text-primary tracking-tighter">{{ reports.successRate | number:'1.2-2' }}%</p>
+        </div>
+        <div class="blink-card p-10 text-center">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Failure Rate</p>
+          <p class="text-6xl font-bold text-red-500 tracking-tighter">{{ reports.failureRate | number:'1.2-2' }}%</p>
+        </div>
+        <div class="blink-card p-10 text-center">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Delay Rate</p>
+          <p class="text-6xl font-bold text-yellow-500 tracking-tighter">{{ reports.delayRate | number:'1.2-2' }}%</p>
+        </div>
+        <div class="blink-card p-10 text-center">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-4">Total Handled</p>
+          <p class="text-6xl font-bold text-white tracking-tighter">{{ reports.total }}</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="blink-card p-12 bg-surface-dim/30">
+          <h3 class="text-xs font-bold text-neutral/40 uppercase tracking-[0.4em] mb-12">Comparative Analysis</h3>
+          <div class="space-y-10">
+            <div>
+              <div class="flex justify-between mb-4">
+                <span class="text-[10px] font-bold text-white uppercase tracking-widest">Successful Deliveries</span>
+                <span class="text-[10px] font-bold text-primary uppercase tracking-widest">{{ reports.delivered }} Units</span>
+              </div>
+              <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full bg-primary" [style.width.%]="reports.successRate"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-4">
+                <span class="text-[10px] font-bold text-white uppercase tracking-widest">Failed / Cancelled</span>
+                <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">{{ reports.failed }} Units</span>
+              </div>
+              <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full bg-red-500" [style.width.%]="reports.failureRate"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-4">
+                <span class="text-[10px] font-bold text-white uppercase tracking-widest">Late Arrivals</span>
+                <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">{{ reports.delayed }} Units</span>
+              </div>
+              <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full bg-yellow-500" [style.width.%]="reports.delayRate"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blink-card p-12 bg-surface-dim/30 relative overflow-hidden">
+          <h3 class="text-xs font-bold text-neutral/40 uppercase tracking-[0.4em] mb-12">Logistics Trend</h3>
+          <div class="h-64 flex items-end justify-between gap-2 relative">
+            <!-- Simulated Line Chart with SVG -->
+            <svg class="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--color-primary)" stop-opacity="0.3"></stop>
+                  <stop offset="100%" stop-color="var(--color-primary)" stop-opacity="0"></stop>
+                </linearGradient>
+              </defs>
+              <path [attr.d]="'M0 100 L50 40 L100 80 L150 20 L200 60 L250 10 L300 50 L350 30 L400 90 L450 40 L500 70'" 
+                    fill="none" stroke="#ff6b00" stroke-width="3" stroke-linecap="round" />
+              <path [attr.d]="'M0 100 L50 40 L100 80 L150 20 L200 60 L250 10 L300 50 L350 30 L400 90 L450 40 L500 70 V100 H0 Z'" 
+                    fill="url(#lineGrad)" />
+            </svg>
+            <div class="absolute bottom-0 w-full flex justify-between text-[8px] font-bold text-neutral/40 uppercase tracking-widest pt-4">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+          </div>
+          <div class="mt-12 p-4 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-primary"></div>
+              <p class="text-[10px] font-bold text-white uppercase">Daily Throughput</p>
+            </div>
+            <p class="text-xs font-bold text-primary">+12.5% ➜</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

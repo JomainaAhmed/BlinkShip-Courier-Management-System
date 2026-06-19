@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationErrors(org.springframework.web.bind.MethodArgumentNotValidException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Validation failed: " + ex.getBindingResult().getFieldError().getDefaultMessage());
+                .body("Validation failed: " + (ex.getBindingResult().getFieldError() != null ? ex.getBindingResult().getFieldError().getDefaultMessage() : "Unknown validation error"));
     }
     
     @ExceptionHandler(AuthorizationDeniedException.class)

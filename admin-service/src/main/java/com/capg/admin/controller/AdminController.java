@@ -38,6 +38,14 @@ public class AdminController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/deliveries/{id}/status")
+    public String updateStatus(@PathVariable("id") Long id, @RequestParam("status") String status) {
+        service.updateStatus(id, status);
+        return "Status updated successfully";
+    }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/reports")
     public ReportDto reports() {
         return service.getReports();

@@ -1,0 +1,216 @@
+<app-navbar />
+
+<main class="max-w-7xl mx-auto px-8 pt-40 pb-12">
+  <header class="mb-12 animate-slide-up">
+    <h2 class="text-5xl font-bold text-white tracking-tighter uppercase">Track Your <span
+        class="text-primary">Shipment</span>
+    </h2>
+    <p class="text-white text-sm uppercase tracking-wide mt-2">Enter your tracking ID below to get status updates
+    </p>
+  </header>
+
+  <div class="max-w-5xl mx-auto">
+    <!-- Search Box -->
+    <div class="blink-card p-10 mb-16 animate-slide-up">
+      <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex-1 relative group">
+          <label
+            class="block text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-4 group-focus-within:text-primary transition-colors">Tracking
+            Number</label>
+          <div class="relative">
+            <input type="text" [(ngModel)]="trackingNumber" (keyup.enter)="onTrack()" placeholder="E.G. 1"
+              class="premium-input pl-14">
+            <div
+              class="absolute left-6 top-1/2 -translate-y-1/2 text-primary opacity-50 group-focus-within:opacity-100 transition-opacity">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button (click)="onTrack()" [disabled]="loading || !trackingNumber"
+          class="btn-primary min-w-[200px] mt-8 flex items-center justify-center gap-4">
+          <span *ngIf="loading"
+            class="w-5 h-5 border-4 border-black/20 border-t-black rounded-full animate-spin"></span>
+          {{ loading ? 'TRACKING...' : 'TRACK NOW' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Tracking Results -->
+    <div *ngIf="shipment" class="space-y-12 animate-slide-up">
+
+      <!-- Delivery Timeline -->
+      <section class="blink-card p-12 bg-surface-dim/30 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-16">
+          <h3 class="text-xs font-bold text-white uppercase tracking-[0.4em]">Delivery Timeline</h3>
+          <span class="px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest border" [ngClass]="{
+              'bg-primary/10 text-primary border-primary/20': !isException(),
+              'bg-red-500/10 text-red-500 border-red-500/20': isException()
+            }">
+            Current: {{ shipment.status }}
+          </span>
+        </div>
+
+        <!-- Progress Bar Container -->
+        <div class="relative px-4">
+          <!-- Background Line -->
+          <div class="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-1 bg-white/5 rounded-full"></div>
+          <!-- Progress Line -->
+          <div class="absolute left-4 top-1/2 -translate-y-1/2 h-1 transition-all duration-1000 ease-out"
+            [style.width.%]="getProgress()" [ngClass]="{
+              'bg-primary shadow-[0_0_15px_rgba(255,107,0,0.5)]': !isException(),
+              'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]': isException()
+            }"></div>
+
+          <!-- Steps -->
+          <div class="relative flex justify-between">
+            <div *ngFor="let step of allPossibleSteps" class="flex flex-col items-center">
+              <div
+                class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 z-10 border-4 border-background"
+                [ngClass]="{
+                  'bg-primary text-black scale-110 shadow-[0_0_20px_rgba(255,107,0,0.4)]': isStepCompleted(step.status) && !isException(),
+                  'bg-red-500 text-black scale-110 shadow-[0_0_20px_rgba(239,68,68,0.4)]': isException(),
+                  'bg-neutral-800 text-neutral-500': !isStepCompleted(step.status) && !isException()
+                }">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="step.icon" />
+                </svg>
+              </div>
+              <p [class]="isStepCompleted(step.status) ? 'text-white' : 'text-neutral-500'"
+                class="text-[10px] font-bold uppercase tracking-widest text-center whitespace-nowrap transition-colors duration-500">
+                {{ step.label }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Detailed Info Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Shipment Details -->
+        <div class="blink-card p-10 space-y-8">
+          <h3 class="text-xs font-bold text-white uppercase tracking-[0.2em] mb-4">Shipment Details</h3>
+
+          <div class="space-y-6">
+            <div class="flex justify-between items-center border-b border-white/5 pb-4">
+              <span class="text-[10px] text-white uppercase font-bold tracking-widest">Tracking ID</span>
+              <span class="text-sm text-white font-bold tracking-widest">#{{ shipment.id }}</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-white/5 pb-4">
+              <span class="text-[10px] text-white uppercase font-bold tracking-widest">Service Type</span>
+              <span class="text-sm text-primary font-bold tracking-widest">EXPRESS DELIVERY</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-white/5 pb-4">
+              <span class="text-[10px] text-white uppercase font-bold tracking-widest">Booked On</span>
+              <span class="text-sm text-white font-bold tracking-widest uppercase">{{ (shipment.createdAt | date:'MMM
+                dd, yyyy HH:mm') || 'MAY 02, 2026' }}</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-white/5 pb-4">
+              <span class="text-[10px] text-white uppercase font-bold tracking-widest">Pricing</span>
+              <span class="text-xl text-white font-bold tracking-tighter">₹{{ (shipment.price ||
+                shipment.packageDetails?.price) | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Location Info -->
+        <div class="blink-card p-10 space-y-8">
+          <h3 class="text-xs font-bold text-white uppercase tracking-[0.2em] mb-4">Destination Info</h3>
+
+          <div class="flex gap-6">
+            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-primary shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-[10px] text-white uppercase font-bold tracking-widest mb-2">Delivery Address</p>
+              <p class="text-white font-bold uppercase text-sm mb-1">{{ shipment.receiver?.name }}</p>
+              <p class="text-xs text-white uppercase leading-relaxed">
+                {{ shipment.receiver?.addressLine }}<br>
+                {{ shipment.receiver?.city }}, {{ shipment.receiver?.state }} - {{ shipment.receiver?.pincode }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tracking History (Optional) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section *ngIf="steps.length > 0" class="lg:col-span-2 blink-card p-10">
+          <h3 class="text-xs font-bold text-white uppercase tracking-[0.2em] mb-10">Detailed Activity</h3>
+          <div class="space-y-8">
+            <div *ngFor="let step of steps"
+              class="flex items-center justify-between border-b border-white/5 pb-6 last:border-0 last:pb-0">
+              <div class="flex items-center gap-6">
+                <div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(255,107,0,0.5)]"></div>
+                <div>
+                  <p class="text-sm text-white font-bold uppercase tracking-tight">{{ step.status }}</p>
+                  <p class="text-[10px] text-white uppercase tracking-widest mt-1">{{ step.location || 'System
+                    Update' }}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-white font-medium">{{ step.timestamp | date:'mediumDate' }}</p>
+                <p class="text-[10px] text-white mt-1 uppercase">{{ step.timestamp | date:'shortTime' }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Document Management -->
+        <section class="blink-card p-10 flex flex-col gap-6">
+          <h3 class="text-xs font-bold text-white uppercase tracking-[0.2em] mb-4">Documents</h3>
+
+          <button (click)="downloadDocument()" class="btn-outline w-full flex items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Download Invoice
+          </button>
+
+          <div class="relative">
+            <input type="file" (change)="handleFileUpload($event)"
+              class="absolute inset-0 opacity-0 cursor-pointer z-10">
+            <button class="btn-primary w-full flex items-center justify-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              Upload Receipt
+            </button>
+          </div>
+
+          <p class="text-[8px] font-bold text-white uppercase tracking-widest text-center">Supported: PDF, JPG, PNG
+            (MAX 5MB)</p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Empty State / Welcome -->
+    <div *ngIf="!shipment && !loading" class="text-center py-32 animate-fade-in">
+      <div class="w-32 h-32 bg-white/5 rounded-[48px] flex items-center justify-center mx-auto mb-10 text-neutral-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M9 20l-5.447-2.724A2 2 0 013 15.483V7.416a2 2 0 011.132-1.808l6-3a2 2 0 011.736 0l6 3A2 2 0 0119 7.416v8.067a2 2 0 01-1.553 1.958L12 20V10z" />
+        </svg>
+      </div>
+      <p class="text-xl font-bold text-white uppercase tracking-tighter mb-4">No tracking data found</p>
+      <p class="text-[10px] font-bold text-white uppercase tracking-[0.4em] max-w-xs mx-auto leading-relaxed">
+        Please enter a valid tracking ID to view your shipment journey.
+      </p>
+    </div>
+  </div>
+</main>

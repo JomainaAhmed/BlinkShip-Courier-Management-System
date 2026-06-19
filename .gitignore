@@ -1,1 +1,9 @@
 /.metadata/
+/postgres_data/
+/logs/
+/target/
+*.log
+.DS_Store
+.mvn/
+bin/
+*.class

@@ -1,0 +1,18 @@
+graph LR
+    subgraph Publisher ["Publisher"]
+        Delivery["Delivery Service"]
+    end
+    
+    subgraph Broker ["RabbitMQ Broker"]
+        Exchange{"Exchange"}
+        Queue["Tracking Queue"]
+        
+        Exchange -->|Routing Key| Queue
+    end
+    
+    subgraph Consumer ["Consumer"]
+        Tracking["Tracking Service"]
+    end
+    
+    Delivery -->|Publish Event| Exchange
+    Queue -->|Consume Event| Tracking

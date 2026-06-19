@@ -7,10 +7,12 @@ import com.capg.tracking.repository.TrackingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class TrackingService {
 
@@ -28,6 +30,7 @@ public class TrackingService {
         tracking.setLocation(getLocation(status));
         tracking.setTimestamp(LocalDateTime.now());
 
+        log.info("Recording tracking info for delivery {}: {}", deliveryId, status);
         repository.save(tracking);
     }
 
@@ -51,6 +54,7 @@ public class TrackingService {
         tracking.setFileName(file.getOriginalFilename());
         tracking.setFileType(file.getContentType());
 
+        log.info("Uploading document {} for delivery {}", file.getOriginalFilename(), deliveryId);
         repository.save(tracking);
     }
 

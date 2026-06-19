@@ -87,6 +87,7 @@ public class JwtFilter extends OncePerRequestFilter {
                uri.contains("/swagger-ui") ||
                uri.contains("/swagger-resources") ||
                uri.contains("/webjars") ||
+               uri.contains("/actuator") ||
                uri.contains("/error");
     }
 }

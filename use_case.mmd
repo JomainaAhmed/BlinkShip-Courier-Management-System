@@ -1,0 +1,35 @@
+flowchart LR
+    Customer(["👤 Customer"])
+    Admin(["🛠️ Admin"])
+
+    subgraph Blinkship Courier System
+        UC1(["Register / Login"])
+        UC2(["Book a Courier"])
+        UC3(["Track a Shipment"])
+        UC4(["Calculate Pricing Preview"])
+        UC5(["View Personal Shipment History"])
+        UC6(["Upload / Download Documents"])
+        
+        UC7(["Manage All Deliveries"])
+        UC8(["Update Delivery Status"])
+        UC9(["Resolve Stuck Deliveries"])
+        UC10(["View System Dashboard & KPIs"])
+        UC11(["Export Reports (CSV)"])
+    end
+
+    Customer --> UC1
+    Customer --> UC2
+    Customer --> UC3
+    Customer --> UC4
+    Customer --> UC5
+    Customer --> UC6
+
+    Admin --> UC1
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC11

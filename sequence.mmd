@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    actor User
+    participant UI as Angular UI
+    participant Gateway as API Gateway
+    participant Delivery as Delivery Service
+    participant DB as Database
+
+    User->>UI: Submit Booking Form
+    UI->>Gateway: POST /deliveries/create
+    Gateway->>Delivery: Forward Request
+    
+    Delivery->>Delivery: Calculate Price
+    Delivery->>DB: Save Delivery Info
+    DB-->>Delivery: Confirm Save
+    
+    Delivery-->>Gateway: 201 Created (Details & Tracking QR)
+    Gateway-->>UI: 201 Created
+    UI-->>User: Display Booking Confirmation

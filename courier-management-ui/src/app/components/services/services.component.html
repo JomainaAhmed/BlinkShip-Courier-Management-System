@@ -1,0 +1,241 @@
+<app-navbar />
+
+<div class="services-page bg-black text-white overflow-x-hidden">
+
+  <!-- ===== ENTRY SECTION ===== -->
+  <section class="entry-section min-h-screen flex flex-col items-center justify-center text-center px-8 relative overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-orange-600/5 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay:2s"></div>
+    </div>
+    <div class="relative z-10 scroll-animate fade-slide-up">
+      <div class="inline-flex items-center gap-2 px-5 py-2 mb-8 rounded-full bg-primary/10 border border-primary/20">
+        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+        <span class="text-xs font-bold text-primary uppercase tracking-[0.3em]">Our Services</span>
+      </div>
+      <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white mb-6 leading-none">
+        How We Deliver,<br><span class="text-primary">Better.</span>
+      </h1>
+      <p class="text-xl text-white font-medium max-w-xl mx-auto mb-16">
+        From pickup to doorstep — fast, reliable, and transparent.
+      </p>
+      <a href="#services-scroll" class="scroll-down-hint flex flex-col items-center gap-3 text-white hover:text-primary transition-colors group">
+        <span class="text-xs font-bold uppercase tracking-[0.3em]">Scroll to explore</span>
+        <div class="w-6 h-10 border-2 border-current rounded-full flex items-start justify-center pt-2 group-hover:border-primary transition-colors">
+          <div class="w-1.5 h-1.5 bg-current rounded-full animate-scroll-dot"></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== HORIZONTAL SNAP SCROLL SECTIONS ===== -->
+  <div id="services-scroll" class="snap-container">
+
+    <!-- SECTION 1: Standard Delivery -->
+    <section class="snap-section standard-section">
+      <div class="snap-inner">
+        <div class="service-img-wrap scroll-animate zoom-in">
+          <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&q=80&w=900"
+               alt="Standard Delivery Warehouse"
+               class="service-img">
+          <div class="img-overlay"></div>
+          <div class="service-badge">3–5 Days</div>
+        </div>
+        <div class="service-text-wrap scroll-animate slide-right">
+          <span class="service-number">01</span>
+          <h2 class="service-title">Affordable Everyday Shipping</h2>
+          <p class="service-desc">Reliable deliveries within 3–5 business days. Our standard service covers every pin code across India without breaking the bank.</p>
+          <ul class="service-features">
+            <li><span class="dot"></span>Pan-India coverage</li>
+            <li><span class="dot"></span>SMS & email notifications</li>
+            <li><span class="dot"></span>Doorstep delivery</li>
+          </ul>
+          <a routerLink="/book" class="service-cta">Book Now →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Express Delivery -->
+    <section class="snap-section express-section">
+      <div class="snap-inner reverse">
+        <div class="service-text-wrap scroll-animate slide-left">
+          <span class="service-number">02</span>
+          <h2 class="service-title">Express Delivery</h2>
+          <p class="service-desc">Get your parcels delivered in 24–48 hours. Our express network is built for speed — no compromises, no delays.</p>
+          <ul class="service-features">
+            <li><span class="dot orange"></span>Priority routing</li>
+            <li><span class="dot orange"></span>24/7 operations</li>
+            <li><span class="dot orange"></span>Real-time updates</li>
+          </ul>
+          <a routerLink="/book" class="service-cta">Ship Express →</a>
+        </div>
+        <div class="service-img-wrap scroll-animate zoom-in">
+          <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=900"
+               alt="Express Delivery Van"
+               class="service-img motion-blur">
+          <div class="img-overlay orange-overlay"></div>
+          <div class="service-badge orange-badge">24–48 Hrs</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Same-Day Delivery -->
+    <section class="snap-section sameday-section">
+      <div class="snap-inner">
+        <div class="service-img-wrap scroll-animate zoom-in relative">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=900"
+               alt="Same Day Delivery Rider"
+               class="service-img">
+          <div class="img-overlay"></div>
+          <!-- Pulsing Pin -->
+          <div class="pulse-pin">
+            <div class="pin-outer"></div>
+            <div class="pin-inner"></div>
+            <div class="pin-icon">📍</div>
+          </div>
+          <div class="service-badge">Same Day</div>
+        </div>
+        <div class="service-text-wrap scroll-animate slide-right">
+          <span class="service-number">03</span>
+          <h2 class="service-title">Same-Day Delivery</h2>
+          <p class="service-desc">Perfect for urgent shipments within your city. Book before noon and your parcel arrives the same evening.</p>
+          <ul class="service-features">
+            <li><span class="dot"></span>Available in 30+ cities</li>
+            <li><span class="dot"></span>Live rider tracking</li>
+            <li><span class="dot"></span>Proof of delivery</li>
+          </ul>
+          <a routerLink="/book" class="service-cta">Book Same-Day →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Live Tracking -->
+    <section class="snap-section tracking-section">
+      <div class="snap-inner reverse">
+        <div class="service-text-wrap scroll-animate slide-left">
+          <span class="service-number">04</span>
+          <h2 class="service-title">Track in Real-Time</h2>
+          <p class="service-desc">Know exactly where your parcel is at every moment. Our live tracking system gives you complete visibility.</p>
+          <ul class="service-features">
+            <li><span class="dot"></span>Live map view</li>
+            <li><span class="dot"></span>Status milestones</li>
+            <li><span class="dot"></span>Estimated arrival time</li>
+          </ul>
+          <a routerLink="/track" class="service-cta">Track a Parcel →</a>
+        </div>
+        <div class="service-img-wrap scroll-animate zoom-in">
+          <!-- Mock Tracking UI -->
+          <div class="mock-tracking">
+            <div class="tracking-header">
+              <div class="tracking-id">BKSHP-2024-99</div>
+              <span class="tracking-status">In Transit</span>
+            </div>
+            <div class="tracking-steps">
+              <div class="t-step done">
+                <div class="t-dot done-dot"></div>
+                <div class="t-label">
+                  <div class="t-title">Order Picked Up</div>
+                  <div class="t-time">Today, 9:00 AM</div>
+                </div>
+              </div>
+              <div class="t-line done-line"></div>
+              <div class="t-step done">
+                <div class="t-dot done-dot"></div>
+                <div class="t-label">
+                  <div class="t-title">Reached Sorting Hub</div>
+                  <div class="t-time">Today, 11:30 AM</div>
+                </div>
+              </div>
+              <div class="t-line done-line"></div>
+              <div class="t-step active">
+                <div class="t-dot active-dot"></div>
+                <div class="t-label">
+                  <div class="t-title">Out for Delivery</div>
+                  <div class="t-time">Today, 2:15 PM</div>
+                </div>
+              </div>
+              <div class="t-line pending-line">
+                <div class="moving-dot"></div>
+              </div>
+              <div class="t-step pending">
+                <div class="t-dot pending-dot"></div>
+                <div class="t-label">
+                  <div class="t-title">Delivered</div>
+                  <div class="t-time">Estimated 5:00 PM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: International Shipping -->
+    <section class="snap-section international-section">
+      <div class="snap-inner">
+        <div class="service-img-wrap scroll-animate zoom-in">
+          <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=900"
+               alt="International Shipping"
+               class="service-img">
+          <div class="img-overlay"></div>
+          <!-- Globe dots overlay -->
+          <div class="globe-overlay">
+            <div class="globe-dot" style="top:30%;left:20%"></div>
+            <div class="globe-dot" style="top:50%;left:50%"></div>
+            <div class="globe-dot" style="top:40%;left:75%"></div>
+            <div class="globe-line"></div>
+          </div>
+          <div class="service-badge">200+ Countries</div>
+        </div>
+        <div class="service-text-wrap scroll-animate slide-right">
+          <span class="service-number">05</span>
+          <h2 class="service-title">Global Reach</h2>
+          <p class="service-desc">We deliver across borders with ease. From India to anywhere in the world — fully tracked, fully insured.</p>
+          <ul class="service-features">
+            <li><span class="dot"></span>200+ countries served</li>
+            <li><span class="dot"></span>Customs clearance support</li>
+            <li><span class="dot"></span>End-to-end tracking</li>
+          </ul>
+          <a routerLink="/book" class="service-cta">Ship Globally →</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ===== PARALLAX SECTION ===== -->
+  <section class="parallax-section">
+    <div class="parallax-bg"></div>
+    <div class="parallax-content scroll-animate fade-slide-up">
+      <h2 class="parallax-title">Built for Speed.<br><span>Designed for Trust.</span></h2>
+      <p class="parallax-sub">Every delivery backed by our commitment to reliability, safety, and transparency.</p>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA SECTION ===== -->
+  <section class="cta-section">
+    <div class="cta-glow cta-glow-left"></div>
+    <div class="cta-glow cta-glow-right"></div>
+    <div class="cta-content scroll-animate fade-slide-up">
+      <h2 class="cta-title">Ready to send<br>your package?</h2>
+      <p class="cta-sub">Join thousands of happy customers shipping with BlinkShip every day.</p>
+      <div class="cta-buttons">
+        <a routerLink="/book" class="cta-btn-primary">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+          Book a Delivery
+        </a>
+        <a routerLink="/track" class="cta-btn-outline">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Track a Parcel
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <app-footer />
+</div>

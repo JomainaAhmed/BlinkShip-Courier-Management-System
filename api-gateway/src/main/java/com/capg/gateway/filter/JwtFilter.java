@@ -40,8 +40,14 @@ public class JwtFilter implements GlobalFilter {
         try {
             Claims claims = jwtUtil.validateToken(token);
 
-            String username = claims.getSubject();
-            String role = claims.get("role").toString();
+            String username = claims.get("username") != null ? claims.get("username").toString() : claims.getSubject();
+            Object roleObj = claims.get("role");
+            
+            if (roleObj == null) {
+                return unauthorized(exchange, "Role claim missing");
+            }
+            
+            String role = roleObj.toString();
 
             if (isAdminPath(path) && !role.equals("ADMIN")) {
                 return forbidden(exchange, "Admin access required");
@@ -64,6 +70,7 @@ public class JwtFilter implements GlobalFilter {
                path.contains("/auth/login") ||
                path.contains("/v3/api-docs") ||
                path.contains("/swagger-ui") ||
+               path.contains("/actuator") ||
                path.contains("/error");
     }
 

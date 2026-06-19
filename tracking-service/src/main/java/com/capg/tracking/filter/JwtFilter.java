@@ -27,7 +27,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         return path.contains("/v3/api-docs") ||
                path.contains("/swagger-ui") ||
-               path.contains("/swagger-ui.html");
+               path.contains("/swagger-ui.html") ||
+               path.contains("/actuator");
     }
 
     @Override

@@ -3,10 +3,12 @@ package com.capg.admin.service;
 import com.capg.admin.client.*;
 import com.capg.admin.dto.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class AdminService {
 
@@ -19,27 +21,40 @@ public class AdminService {
     }
 
     public DashboardDto getDashboard() {
-
+        log.info("Generating admin dashboard data");
         List<AdminDeliveryDto> deliveries = deliveryClient.getAllDeliveries();
 
         int total = deliveries.size();
-        int booked = 0, inTransit = 0, delivered = 0, delayed = 0;
-
+        int draft = 0, booked = 0, packed = 0, dispatched = 0, pickedUp = 0, inTransit = 0, outForDelivery = 0, delivered = 0, delayed = 0, failed = 0, returned = 0;
         for (AdminDeliveryDto d : deliveries) {
             switch (d.getStatus()) {
+                case "DRAFT" -> draft++;
                 case "BOOKED" -> booked++;
+                case "PACKED" -> packed++;
+                case "DISPATCHED" -> dispatched++;
+                case "PICKED_UP" -> pickedUp++;
                 case "IN_TRANSIT" -> inTransit++;
+                case "OUT_FOR_DELIVERY" -> outForDelivery++;
                 case "DELIVERED" -> delivered++;
                 case "DELAYED" -> delayed++;
+                case "FAILED" -> failed++;
+                case "RETURNED" -> returned++;
             }
         }
 
         DashboardDto dto = new DashboardDto();
         dto.setTotal(total);
+        dto.setDraft(draft);
         dto.setBooked(booked);
+        dto.setPacked(packed);
+        dto.setDispatched(dispatched);
+        dto.setPickedUp(pickedUp);
         dto.setInTransit(inTransit);
+        dto.setOutForDelivery(outForDelivery);
         dto.setDelivered(delivered);
         dto.setDelayed(delayed);
+        dto.setFailed(failed);
+        dto.setReturned(returned);
 
         double successRate = total == 0 ? 0 : (delivered * 100.0 / total);
         dto.setSuccessRate(successRate);
@@ -74,7 +89,13 @@ public class AdminService {
                 throw new com.capg.admin.exception.CustomException("Only exception states can be resolved");
         }
 
+        log.info("Resolving delivery {} from status {} to {}", id, current, next);
         deliveryClient.updateStatus(id, next);
+    }
+
+    public void updateStatus(Long id, String status) {
+        log.info("Admin manual status update for shipment {}: {}", id, status);
+        deliveryClient.updateStatus(id, status);
     }
 
     public ReportDto getReports() {

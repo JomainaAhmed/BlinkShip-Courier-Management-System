@@ -1,0 +1,21 @@
+graph TD
+    Client["Angular Frontend UI"] -->|REST / HTTP| Gateway["API Gateway"]
+    
+    subgraph Microservices ["Microservices Cluster"]
+        Gateway --> Auth["Auth Service"]
+        Gateway --> Delivery["Delivery Service"]
+        Gateway --> Tracking["Tracking Service"]
+        Gateway --> AdminService["Admin Service"]
+    end
+    
+    subgraph Messaging ["Messaging"]
+        Delivery -->|Publish Event| RMQ{{"RabbitMQ Broker"}}
+        RMQ -->|Consume Event| Tracking
+    end
+    
+    subgraph Persistence ["Database"]
+        Auth --> DB[("PostgreSQL")]
+        Delivery --> DB
+        Tracking --> DB
+        AdminService --> DB
+    end

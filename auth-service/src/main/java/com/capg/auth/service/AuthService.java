@@ -10,9 +10,11 @@ import com.capg.auth.util.JwtUtil;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class AuthService {
 
@@ -40,13 +42,13 @@ public class AuthService {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(encoder.encode(dto.getPassword()));
-        
         String role = dto.getRole();
         if (role == null || role.trim().isEmpty()) {
             role = "USER";
         }
         user.setRole(role.toUpperCase());
 
+        log.info("Registering new user: {} with role: {}", user.getUsername(), user.getRole());
         repo.save(user);
     }
 
@@ -59,9 +61,11 @@ public class AuthService {
             throw new InvalidCredentialsException("Invalid password");
         }
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        log.info("User {} logged in successfully", user.getUsername());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getUsername(), user.getRole());
 
         return new Response(token);
+
     }
     
     public List<User> getAllUsers() {

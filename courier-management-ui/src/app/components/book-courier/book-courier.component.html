@@ -1,0 +1,198 @@
+<app-navbar />
+<div class="min-h-screen bg-background pt-32 pb-20 px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-12 animate-slide-up">
+      <h1 class="text-4xl font-bold text-white tracking-tighter uppercase mb-4">Book a Shipment</h1>
+      <p class="text-neutral/40 text-sm font-medium uppercase tracking-widest">Enter comprehensive details to get an instant quote and tracking ID.</p>
+    </div>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="space-y-8 animate-slide-up animation-delay-100">
+      <!-- Grid for Sender & Receiver -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Sender Details -->
+        <div class="blink-card p-8 md:p-10">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h2 class="text-lg font-bold text-white uppercase tracking-tight">Sender Information</h2>
+          </div>
+
+          <div class="space-y-6">
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Full Name</label>
+              <input type="text" formControlName="senderName" class="premium-input text-sm" placeholder="SENDER NAME" [class.border-red-500]="bookingForm.get('senderName')?.invalid && bookingForm.get('senderName')?.touched">
+              <p *ngIf="bookingForm.get('senderName')?.invalid && bookingForm.get('senderName')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">Valid name required</p>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Phone Number</label>
+              <input type="text" formControlName="senderPhone" class="premium-input text-sm" placeholder="SENDER PHONE" [class.border-red-500]="bookingForm.get('senderPhone')?.invalid && bookingForm.get('senderPhone')?.touched">
+              <p *ngIf="bookingForm.get('senderPhone')?.invalid && bookingForm.get('senderPhone')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">10-digit phone required</p>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Address Line</label>
+              <textarea formControlName="senderAddress" class="premium-input text-sm min-h-[100px] py-4" placeholder="FULL STREET ADDRESS" [class.border-red-500]="bookingForm.get('senderAddress')?.invalid && bookingForm.get('senderAddress')?.touched"></textarea>
+              <p *ngIf="bookingForm.get('senderAddress')?.invalid && bookingForm.get('senderAddress')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">Min 10 characters required</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="group">
+                <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">City</label>
+                <input type="text" formControlName="senderCity" class="premium-input text-sm" placeholder="CITY" [class.border-red-500]="bookingForm.get('senderCity')?.invalid && bookingForm.get('senderCity')?.touched">
+              </div>
+              <div class="group">
+                <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Pincode</label>
+                <input type="text" formControlName="senderPincode" class="premium-input text-sm" placeholder="PINCODE" [class.border-red-500]="bookingForm.get('senderPincode')?.invalid && bookingForm.get('senderPincode')?.touched">
+                <p *ngIf="bookingForm.get('senderPincode')?.invalid && bookingForm.get('senderPincode')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">Invalid pincode</p>
+              </div>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">State</label>
+              <input type="text" formControlName="senderState" class="premium-input text-sm" placeholder="STATE" [class.border-red-500]="bookingForm.get('senderState')?.invalid && bookingForm.get('senderState')?.touched">
+            </div>
+          </div>
+        </div>
+
+        <!-- Receiver Details -->
+        <div class="blink-card p-8 md:p-10">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+            </div>
+            <h2 class="text-lg font-bold text-white uppercase tracking-tight">Receiver Information</h2>
+          </div>
+
+          <div class="space-y-6">
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Full Name</label>
+              <input type="text" formControlName="receiverName" class="premium-input text-sm" placeholder="RECEIVER NAME" [class.border-red-500]="bookingForm.get('receiverName')?.invalid && bookingForm.get('receiverName')?.touched">
+              <p *ngIf="bookingForm.get('receiverName')?.invalid && bookingForm.get('receiverName')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">Valid name required</p>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Phone Number</label>
+              <input type="text" formControlName="receiverPhone" class="premium-input text-sm" placeholder="RECEIVER PHONE" [class.border-red-500]="bookingForm.get('receiverPhone')?.invalid && bookingForm.get('receiverPhone')?.touched">
+              <p *ngIf="bookingForm.get('receiverPhone')?.invalid && bookingForm.get('receiverPhone')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">10-digit phone required</p>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Address Line</label>
+              <textarea formControlName="receiverAddress" class="premium-input text-sm min-h-[100px] py-4" placeholder="FULL STREET ADDRESS" [class.border-red-500]="bookingForm.get('receiverAddress')?.invalid && bookingForm.get('receiverAddress')?.touched"></textarea>
+              <p *ngIf="bookingForm.get('receiverAddress')?.invalid && bookingForm.get('receiverAddress')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">Min 10 characters required</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="group">
+                <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">City</label>
+                <input type="text" formControlName="receiverCity" class="premium-input text-sm" placeholder="CITY" [class.border-red-500]="bookingForm.get('receiverCity')?.invalid && bookingForm.get('receiverCity')?.touched">
+              </div>
+              <div class="group">
+                <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Pincode</label>
+                <input type="text" formControlName="receiverPincode" class="premium-input text-sm" placeholder="PINCODE" [class.border-red-500]="bookingForm.get('receiverPincode')?.invalid && bookingForm.get('receiverPincode')?.touched">
+                <p *ngIf="bookingForm.get('receiverPincode')?.invalid && bookingForm.get('receiverPincode')?.touched" class="text-red-500 text-[9px] font-bold mt-1 uppercase tracking-widest">Invalid pincode</p>
+              </div>
+            </div>
+            <div class="group">
+              <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">State</label>
+              <input type="text" formControlName="receiverState" class="premium-input text-sm" placeholder="STATE" [class.border-red-500]="bookingForm.get('receiverState')?.invalid && bookingForm.get('receiverState')?.touched">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Package Specifications -->
+      <div class="blink-card p-8 md:p-10">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <h2 class="text-lg font-bold text-white uppercase tracking-tight">Package Specifications</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="group lg:col-span-2">
+            <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Description</label>
+            <input type="text" formControlName="description" class="premium-input text-sm" placeholder="E.G. ELECTRONICS, CLOTHING" [class.border-red-500]="bookingForm.get('description')?.invalid && bookingForm.get('description')?.touched">
+          </div>
+          <div class="group">
+            <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Weight (kg)</label>
+            <input type="number" formControlName="weight" class="premium-input text-sm" placeholder="0.0" [class.border-red-500]="bookingForm.get('weight')?.invalid && bookingForm.get('weight')?.touched">
+          </div>
+          <div class="group">
+            <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Length (cm)</label>
+            <input type="number" formControlName="length" class="premium-input text-sm" placeholder="0" [class.border-red-500]="bookingForm.get('length')?.invalid && bookingForm.get('length')?.touched">
+          </div>
+          <div class="group">
+            <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Width (cm)</label>
+            <input type="number" formControlName="width" class="premium-input text-sm" placeholder="0" [class.border-red-500]="bookingForm.get('width')?.invalid && bookingForm.get('width')?.touched">
+          </div>
+          <div class="group">
+            <label class="block text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Height (cm)</label>
+            <input type="number" formControlName="height" class="premium-input text-sm" placeholder="0" [class.border-red-500]="bookingForm.get('height')?.invalid && bookingForm.get('height')?.touched">
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 pt-8">
+        <div class="text-center md:text-left">
+          <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-[0.3em] mb-1">Estimated Price</p>
+          <p class="text-4xl font-bold text-primary tracking-tighter">
+            <ng-container *ngIf="estimatedPrice !== null">₹{{ estimatedPrice | number:'1.2-2' }}</ng-container>
+            <ng-container *ngIf="estimatedPrice === null">₹0.00</ng-container>
+          </p>
+        </div>
+
+        <div class="flex items-center gap-4 w-full md:w-auto">
+          <button type="button" routerLink="/dashboard" class="px-10 py-5 border border-white/5 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all rounded-2xl">Cancel</button>
+          <button 
+            type="submit" 
+            [disabled]="bookingForm.invalid || loading"
+            class="btn-primary flex-1 md:flex-none px-16 py-5 flex items-center justify-center gap-4"
+          >
+            <span *ngIf="loading" class="w-5 h-5 border-4 border-black/20 border-t-black rounded-full animate-spin"></span>
+            {{ loading ? 'Processing...' : 'Confirm Shipment' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Success Overlay -->
+  <div *ngIf="bookedShipment" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl animate-fade-in">
+    <div class="blink-card max-w-xl w-full p-12 text-center relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 blur-[100px] rounded-full"></div>
+      
+      <div class="w-24 h-24 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-10 shadow-[0_0_50px_rgba(255,107,0,0.2)]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      <h2 class="text-4xl font-bold text-white tracking-tighter uppercase mb-4">Shipment Booked!</h2>
+      <p class="text-neutral/40 text-[10px] font-bold uppercase tracking-[0.4em] mb-12">Your parcel is ready for pickup.</p>
+
+      <div class="bg-white/5 rounded-3xl p-8 mb-12 border border-white/5">
+        <p class="text-[10px] font-bold text-neutral/40 uppercase tracking-widest mb-2">Tracking Number</p>
+        <p class="text-4xl font-bold text-white tracking-widest">#{{ bookedShipment.id }}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <button (click)="printLabel()" class="flex items-center justify-center gap-3 px-8 py-5 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          Print Label
+        </button>
+        <button (click)="resetForm()" class="flex items-center justify-center gap-3 px-8 py-5 bg-white/5 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">
+          Go to Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

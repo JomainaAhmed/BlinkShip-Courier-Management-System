@@ -1,0 +1,264 @@
+<app-navbar />
+
+<div class="overflow-hidden bg-black text-white">
+
+  <!-- ===== HERO SECTION ===== -->
+  <section
+    class="relative min-h-screen pt-32 flex flex-col items-center justify-center text-center px-8 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000"
+        alt="Logistics Background" class="w-full h-full object-cover opacity-20 grayscale">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
+    </div>
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-primary/10 blur-[140px] rounded-full z-10 animate-fade-in">
+    </div>
+
+    <div class="relative z-20 animate-slide-up max-w-5xl">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full bg-primary/10 border border-primary/20">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+        <span class="text-xs font-bold text-primary uppercase tracking-[0.3em]"
+          style="font-family:'Montserrat',sans-serif;">Fast &amp; Reliable Courier Service</span>
+      </div>
+      <h1 class="heading-hero text-white mb-6">
+        Seamless <span class="text-primary">Delivery</span> Solutions<br>for Everyone.
+      </h1>
+      <p class="text-subtext text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
+        Shipping parcels across India has never been easier. Whether it's a personal gift or a business shipment, we've
+        got you covered with smart technology and a commitment to excellence.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-5 animate-slide-up animation-delay-300">
+        <button routerLink="/book" class="btn-primary">Book a Delivery</button>
+        <button routerLink="/services" class="btn-outline">Explore Services</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUICK TRACK ===== -->
+  <section class="max-w-4xl mx-auto px-8 pb-24">
+    <div class="blink-card p-10 md:p-14 border-primary/20">
+      <p class="section-label text-center">Shipment Tracker</p>
+      <h2 class="section-heading text-center mb-10">Track Your Parcel</h2>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1 relative group">
+          <input type="text" [(ngModel)]="trackingId" placeholder="ENTER YOUR TRACKING ID HERE"
+            class="premium-input pl-14 placeholder:text-neutral/20">
+          <div
+            class="absolute left-6 top-1/2 -translate-y-1/2 text-primary opacity-50 group-focus-within:opacity-100 transition-opacity">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+        <button (click)="track()" class="btn-primary min-w-[180px]">Start Tracking</button>
+      </div>
+      <p class="text-[10px] text-neutral/20 font-semibold uppercase tracking-widest mt-6 text-center"
+        style="font-family:'Montserrat',sans-serif;">Try: 2</p>
+    </div>
+  </section>
+
+  <!-- ===== TRUSTED BY LOGOS ===== -->
+  <section class="max-w-7xl mx-auto px-8 pb-24 text-center">
+    <p class="section-label">Trusted by Forward-Thinking Businesses</p>
+    <div class="flex flex-wrap justify-center items-center gap-16 opacity-25 mt-8">
+      <div class="text-xl font-black uppercase" style="font-family:'Montserrat',sans-serif;">LogiLink</div>
+      <div class="text-xl font-black uppercase" style="font-family:'Montserrat',sans-serif;">SwiftStore</div>
+      <div class="text-xl font-black uppercase" style="font-family:'Montserrat',sans-serif;">UrbanCart</div>
+      <div class="text-xl font-black uppercase" style="font-family:'Montserrat',sans-serif;">PrimeGlobal</div>
+      <div class="text-xl font-black uppercase" style="font-family:'Montserrat',sans-serif;">NovaTrade</div>
+    </div>
+  </section>
+
+  <!-- ===== KEY FEATURES ===== -->
+  <section class="max-w-7xl mx-auto px-8 pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="blink-card p-12 group">
+        <div
+          class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-black text-white mb-3" style="font-family:'Montserrat',sans-serif;">Real-time Tracking
+        </h3>
+        <p class="text-subtext text-sm">Follow your package at every step with timeline tracking and instant status
+          notifications.</p>
+      </div>
+      <div class="blink-card p-12 group">
+        <div
+          class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-black text-white mb-3" style="font-family:'Montserrat',sans-serif;">Express Delivery
+        </h3>
+        <p class="text-subtext text-sm">Priority routing ensures your critical shipments reach their destination with
+          unmatched speed</p>
+      </div>
+      <div class="blink-card p-12 group">
+        <div
+          class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-black text-white mb-3" style="font-family:'Montserrat',sans-serif;">Affordable Rates
+        </h3>
+        <p class="text-subtext text-sm">Competitive pricing for every shipment — premium service without the premium
+          price tag</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== TRUST BADGES ===== -->
+  <section class="max-w-7xl mx-auto px-8 pb-24">
+    <div class="flex flex-wrap justify-center gap-12 py-12 border-y border-white/5">
+      <div class="flex items-center gap-3 opacity-40 hover:opacity-80 transition-opacity">
+        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+          <path fill-rule="evenodd"
+            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13zM7 13a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z"
+            clip-rule="evenodd" />
+        </svg>
+        <span class="text-xs font-bold uppercase tracking-widest text-white"
+          style="font-family:'Montserrat',sans-serif;">ISO 9001 Certified</span>
+      </div>
+      <div class="flex items-center gap-3 opacity-40 hover:opacity-80 transition-opacity">
+        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd" />
+        </svg>
+        <span class="text-xs font-bold uppercase tracking-widest text-white"
+          style="font-family:'Montserrat',sans-serif;">Secure Payments</span>
+      </div>
+      <div class="flex items-center gap-3 opacity-40 hover:opacity-80 transition-opacity">
+        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+          <path
+            d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015.5 7H14z" />
+        </svg>
+        <span class="text-xs font-bold uppercase tracking-widest text-white"
+          style="font-family:'Montserrat',sans-serif;">Pan-India Fleet</span>
+      </div>
+      <div class="flex items-center gap-3 opacity-40 hover:opacity-80 transition-opacity">
+        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+            clip-rule="evenodd" />
+        </svg>
+        <span class="text-xs font-bold uppercase tracking-widest text-white"
+          style="font-family:'Montserrat',sans-serif;">Insured Shipments</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="max-w-7xl mx-auto px-8 pb-24">
+    <p class="section-label text-center">Happy Customers</p>
+    <h2 class="section-heading text-center mb-16">Real Stories, Real Deliveries</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="blink-card p-12">
+        <div class="flex items-center gap-4 mb-8">
+          <div
+            class="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black text-sm"
+            style="font-family:'Montserrat',sans-serif;">AM</div>
+          <div>
+            <div class="text-sm font-black text-white uppercase tracking-widest"
+              style="font-family:'Montserrat',sans-serif;">Arjun Mehta</div>
+            <div class="text-[10px] text-neutral/40 font-semibold uppercase tracking-widest mt-0.5"
+              style="font-family:'Montserrat',sans-serif;">E-commerce Seller, Mumbai</div>
+          </div>
+        </div>
+        <div class="flex gap-1 mb-5">
+          <span *ngFor="let s of [1,2,3,4,5]" class="text-primary text-sm">★</span>
+        </div>
+        <p class="text-subtext text-sm leading-relaxed italic">
+          "BlinkShip has completely changed how I manage my small business. Their real-time tracking is super reliable,
+          and my customers love the fast delivery times!"
+        </p>
+      </div>
+      <div class="blink-card p-12">
+        <div class="flex items-center gap-4 mb-8">
+          <div
+            class="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black text-sm"
+            style="font-family:'Montserrat',sans-serif;">PS</div>
+          <div>
+            <div class="text-sm font-black text-white uppercase tracking-widest"
+              style="font-family:'Montserrat',sans-serif;">Priya Sharma</div>
+            <div class="text-[10px] text-neutral/40 font-semibold uppercase tracking-widest mt-0.5"
+              style="font-family:'Montserrat',sans-serif;">Graduate Student, Delhi</div>
+          </div>
+        </div>
+        <div class="flex gap-1 mb-5">
+          <span *ngFor="let s of [1,2,3,4,5]" class="text-primary text-sm">★</span>
+        </div>
+        <p class="text-subtext text-sm leading-relaxed italic">
+          "I used BlinkShip to send a gift to my family. It was so easy to book, and the price was very reasonable.
+          Definitely better than the traditional couriers I've used before."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ SECTION ===== -->
+  <section class="max-w-4xl mx-auto px-8 pb-24">
+    <p class="section-label text-center">Support</p>
+    <h2 class="section-heading text-center mb-16">Frequently Asked Questions</h2>
+    <div class="space-y-3">
+      <div *ngFor="let faq of faqs; let i = index" class="blink-card overflow-hidden">
+        <button (click)="toggleFaq(i)"
+          class="w-full p-7 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
+          <span class="text-sm font-bold text-white" style="font-family:'Montserrat',sans-serif;">{{ faq.question
+            }}</span>
+          <svg class="w-5 h-5 text-primary transition-transform duration-300 flex-shrink-0 ml-4"
+            [class.rotate-180]="faq.isOpen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div *ngIf="faq.isOpen" class="px-7 pb-7 text-subtext text-sm leading-relaxed">
+          {{ faq.answer }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA SECTION ===== -->
+  <section class="max-w-5xl mx-auto px-8 pb-24">
+    <div
+      class="blink-card py-24 px-12 text-center bg-gradient-to-br from-orange-600 to-orange-800 relative overflow-hidden group">
+      <div
+        class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000">
+      </div>
+      <div class="absolute -left-20 -bottom-20 w-48 h-48 bg-black/20 rounded-full blur-3xl"></div>
+      <div class="relative z-10">
+        <h2 class="text-4xl md:text-5xl font-black text-black uppercase mb-4 leading-tight"
+          style="font-family:'Montserrat',sans-serif;">
+          Ready to Elevate Your<br>Shipping Experience?
+        </h2>
+        <p class="text-black/60 text-sm font-medium mb-10" style="font-family:'Montserrat',sans-serif;">Join thousands
+          of happy customers shipping with BlinkShip every day.</p>
+        <div class="flex flex-wrap justify-center gap-5">
+          <button routerLink="/signup"
+            class="px-10 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-2xl text-sm"
+            style="font-family:'Montserrat',sans-serif;">
+            Get Started Now
+          </button>
+          <button routerLink="/book"
+            class="px-10 py-4 bg-white/20 text-black border border-black/10 rounded-2xl font-black uppercase tracking-widest hover:bg-white/30 transition-all text-sm"
+            style="font-family:'Montserrat',sans-serif;">
+            Schedule a Pickup
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-footer />
+</div>

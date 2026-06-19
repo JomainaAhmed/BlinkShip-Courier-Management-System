@@ -33,8 +33,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./scripts/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -48,8 +48,14 @@ services:
     build: ./auth-service
     container_name: auth-service
     restart: always
+    command: ["java", "-Dspring.config.import=optional:configserver:http://config-server:8888", "-jar", "app.jar"]
     ports:
       - "8081:8080"
+    environment:
+      - SPRING_APPLICATION_JSON={"spring.config.import":"optional:configserver:http://config-server:8888"}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/auth_db2
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=false
     depends_on:
       - config-server
       - postgres
@@ -61,6 +67,12 @@ services:
     restart: always
     ports:
       - "8082:8080"
+    environment:
+      - SPRING_APPLICATION_JSON={"spring.config.import":"optional:configserver:http://config-server:8888"}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/delivery_db2
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=false
     depends_on:
       - config-server
       - postgres
@@ -73,6 +85,12 @@ services:
     restart: always
     ports:
       - "8083:8080"
+    environment:
+      - SPRING_APPLICATION_JSON={"spring.config.import":"optional:configserver:http://config-server:8888"}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/tracking_db2
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=false
     depends_on:
       - config-server
       - postgres
@@ -85,6 +103,12 @@ services:
     restart: always
     ports:
       - "8084:8080"
+    environment:
+      - SPRING_APPLICATION_JSON={"spring.config.import":"optional:configserver:http://config-server:8888"}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/admin_db2
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=false
     depends_on:
       - config-server
       - postgres
@@ -97,6 +121,9 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_JSON={"spring.config.import":"optional:configserver:http://config-server:8888","eureka.client.service-url.defaultZone":"http://eureka:8761/eureka","eureka.instance.prefer-ip-address":"true"}
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=false
     depends_on:
       - config-server
       - eureka
@@ -122,8 +149,18 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - api-gateway
+
 volumes:
-  postgres_data:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:
