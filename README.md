@@ -99,3 +99,205 @@ cd delivery-service
    powershell.exe -ExecutionPolicy Bypass -File .\scripts\sonar-scan.ps1
    ```
 3. View results at `http://localhost:9000` (Default login: admin/admin)
+
+4. ---
+
+# System Architecture
+
+![System Architecture](architecture.png)
+
+The Smart Courier Delivery Management System follows a distributed microservices architecture built using Spring Boot and Spring Cloud. The Angular frontend communicates with the API Gateway, which routes requests to individual backend services. RabbitMQ enables asynchronous communication between services, while PostgreSQL stores operational data.
+
+### Core Components
+
+| Component | Responsibility |
+|------------|---------------|
+| API Gateway | Centralized routing, JWT validation, request forwarding |
+| Auth Service | User authentication and JWT token management |
+| Delivery Service | Courier booking, pricing calculations, QR generation |
+| Tracking Service | Shipment tracking and activity logging |
+| Admin Service | Reports, dashboards, delivery management |
+| RabbitMQ | Event-driven communication |
+| PostgreSQL | Persistent storage |
+| Eureka Server | Service registration and discovery |
+| Config Server | Centralized configuration management |
+
+---
+
+# Use Case Diagram
+
+![Use Case](use-case.png)
+
+The system supports two primary actors:
+
+### Customer
+- Register / Login
+- Book a Courier
+- Track a Shipment
+- Calculate Pricing Preview
+- View Shipment History
+- Upload & Download Documents
+
+### Administrator
+- Manage Deliveries
+- Update Delivery Status
+- Resolve Failed Deliveries
+- View Dashboard & KPIs
+- Export Reports
+
+---
+
+# Courier Booking Workflow
+
+![Courier Booking](courier-booking.png)
+
+### Booking Process
+
+1. User fills courier booking form.
+2. Angular validates package dimensions and weight.
+3. Request is sent through API Gateway.
+4. Delivery Service calculates pricing.
+5. Delivery details are stored in PostgreSQL.
+6. A booking event is published to RabbitMQ.
+7. Tracking information is generated.
+8. User receives booking confirmation.
+
+---
+
+# Shipment Tracking Architecture
+
+![Tracking Architecture](tracking.png)
+
+Tracking updates are processed asynchronously using RabbitMQ.
+
+### Benefits
+
+- Event-driven architecture
+- Loose service coupling
+- Better scalability
+- Faster response times
+- Improved fault tolerance
+
+---
+
+# Database Design
+
+![ER Diagram](er-diagram.png)
+
+### Main Entities
+
+#### Users
+Stores customer and administrator credentials.
+
+#### Address
+Stores sender and receiver information.
+
+#### Package Entity
+Stores parcel dimensions, weight, and pricing.
+
+#### Delivery
+Stores delivery status and shipment details.
+
+#### Tracking
+Maintains shipment history and location updates.
+
+---
+
+# Service Discovery
+
+![Eureka Dashboard](eureka-service-registry.png)
+
+Spring Cloud Eureka enables automatic service registration and discovery. Services dynamically register themselves and the API Gateway uses Eureka to locate healthy instances.
+
+---
+
+# API Documentation
+
+![Swagger](swagger.png)
+
+Swagger/OpenAPI documentation is available for:
+
+- Auth Service
+- Delivery Service
+- Tracking Service
+- Admin Service
+
+The documentation is exposed through the API Gateway for centralized API exploration and testing.
+
+---
+
+# Distributed Tracing
+
+![Zipkin](zipkin.png)
+
+Zipkin provides distributed tracing across all microservices, making it easier to:
+
+- Trace requests
+- Analyze latency
+- Debug service interactions
+- Monitor performance bottlenecks
+
+---
+
+# Message Broker
+
+![RabbitMQ](rabbitmq.png)
+
+RabbitMQ powers asynchronous event-driven communication between services.
+
+### Event Flow
+
+Delivery Service
+→ RabbitMQ Exchange
+→ Tracking Queue
+→ Tracking Service
+
+This architecture improves reliability and scalability by decoupling producers and consumers.
+
+---
+
+# Frontend (Angular + Tailwind CSS)
+
+## Landing Page
+
+![Landing Page](label.png)
+
+## Services Page
+
+![Services](services-page.png)
+
+## Parcel Booking Interface
+
+![Booking](parcel-booking-interface.png)
+
+## Authentication
+
+![Login](parcel-booking-interface2.png)
+
+### Features
+
+- JWT Authentication
+- Responsive Design
+- Shipment Tracking
+- Courier Booking
+- Delivery History
+- Admin Operations
+- Modern Tailwind UI
+
+---
+
+# Demo Videos
+
+## Complete Project Demonstration
+
+https://youtu.be/eVhZzyJQdl0
+
+## SonarQube Setup & Analysis
+
+https://youtu.be/augClel4vZA
+
+## BlinkShip Frontend Demonstration
+
+https://youtu.be/eVhZzyJQdl0
+
+---
