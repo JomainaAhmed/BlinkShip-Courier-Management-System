@@ -149,7 +149,7 @@ The system supports two primary actors:
 
 # Courier Booking Workflow
 
-![Courier Booking](courier-booking.png)
+![Courier Booking](docs/courier-booking.png)
 
 ### Booking Process
 
@@ -166,7 +166,7 @@ The system supports two primary actors:
 
 # Shipment Tracking Architecture
 
-![Tracking Architecture](tracking.png)
+![Tracking Architecture](docs/tracking.png)
 
 Tracking updates are processed asynchronously using RabbitMQ.
 
@@ -182,7 +182,7 @@ Tracking updates are processed asynchronously using RabbitMQ.
 
 # Database Design
 
-![ER Diagram](er-diagram.png)
+![ER Diagram](docs/er-diagram.png)
 
 ### Main Entities
 
@@ -205,7 +205,7 @@ Maintains shipment history and location updates.
 
 # Service Discovery
 
-![Eureka Dashboard](eureka-service-registry.png)
+![Eureka Dashboard](docs/eureka-service-registry.png)
 
 Spring Cloud Eureka enables automatic service registration and discovery. Services dynamically register themselves and the API Gateway uses Eureka to locate healthy instances.
 
@@ -213,7 +213,7 @@ Spring Cloud Eureka enables automatic service registration and discovery. Servic
 
 # API Documentation
 
-![Swagger](swagger.png)
+![Swagger](docs/swagger.png)
 
 Swagger/OpenAPI documentation is available for:
 
@@ -228,7 +228,7 @@ The documentation is exposed through the API Gateway for centralized API explora
 
 # Distributed Tracing
 
-![Zipkin](zipkin.png)
+![Zipkin](docs/zipkin.png)
 
 Zipkin provides distributed tracing across all microservices, making it easier to:
 
@@ -241,7 +241,7 @@ Zipkin provides distributed tracing across all microservices, making it easier t
 
 # Message Broker
 
-![RabbitMQ](rabbitmq.png)
+![RabbitMQ](docs/rabbitmq.png)
 
 RabbitMQ powers asynchronous event-driven communication between services.
 
@@ -260,19 +260,19 @@ This architecture improves reliability and scalability by decoupling producers a
 
 ## Landing Page
 
-![Landing Page](label.png)
+![Landing Page](docs/label.png)
 
 ## Services Page
 
-![Services](services-page.png)
+![Services](docs/services-page.png)
 
 ## Parcel Booking Interface
 
-![Booking](parcel-booking-interface.png)
+![Booking](docs/parcel-booking-interface.png)
 
 ## Authentication
 
-![Login](parcel-booking-interface2.png)
+![Login](docs/parcel-booking-interface2.png)
 
 ### Features
 
