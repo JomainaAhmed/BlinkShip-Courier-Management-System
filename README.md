@@ -104,7 +104,7 @@ cd delivery-service
 
 # System Architecture
 
-![System Architecture](architecture.png)
+![System Architecture](docs/architecture.png)
 
 The Smart Courier Delivery Management System follows a distributed microservices architecture built using Spring Boot and Spring Cloud. The Angular frontend communicates with the API Gateway, which routes requests to individual backend services. RabbitMQ enables asynchronous communication between services, while PostgreSQL stores operational data.
 
@@ -126,7 +126,7 @@ The Smart Courier Delivery Management System follows a distributed microservices
 
 # Use Case Diagram
 
-![Use Case](use-case.png)
+![Use Case](docs/use-case.png)
 
 The system supports two primary actors:
 
