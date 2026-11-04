@@ -3,7 +3,7 @@ package com.capg.auth.controller;
 import com.capg.auth.dto.Response;
 import com.capg.auth.dto.LoginRequest;
 import com.capg.auth.dto.SignupRequest;
-import com.capg.auth.entity.User;
+import com.capg.auth.dto.UserDto;
 import com.capg.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -38,7 +38,7 @@ public class AuthController {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return service.getAllUsers();
     }
 }

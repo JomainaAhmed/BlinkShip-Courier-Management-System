@@ -2,8 +2,15 @@
 /postgres_data/
 /logs/
 /target/
+**/target/
 *.log
 .DS_Store
 .mvn/
 bin/
 *.class
+node_modules/
+**/node_modules/
+.angular/
+dist/
+uploads/
+**/uploads/

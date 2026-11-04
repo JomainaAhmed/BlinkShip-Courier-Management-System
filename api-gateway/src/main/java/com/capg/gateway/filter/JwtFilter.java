@@ -25,7 +25,7 @@ public class JwtFilter implements GlobalFilter {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        if (isPublicEndpoint(path)) {
+        if (isPublicEndpoint(exchange)) {
             return chain.filter(exchange);
         }
 
@@ -65,13 +65,29 @@ public class JwtFilter implements GlobalFilter {
         }
     }
 
-    private boolean isPublicEndpoint(String path) {
-        return path.contains("/auth/signup") ||
-               path.contains("/auth/login") ||
-               path.contains("/v3/api-docs") ||
-               path.contains("/swagger-ui") ||
-               path.contains("/actuator") ||
-               path.contains("/error");
+    private boolean isPublicEndpoint(ServerWebExchange exchange) {
+        String path = exchange.getRequest().getURI().getPath();
+        String method = exchange.getRequest().getMethod().name();
+
+        if (path.contains("/auth/signup") ||
+            path.contains("/auth/login") ||
+            path.contains("/v3/api-docs") ||
+            path.contains("/swagger-ui") ||
+            path.contains("/actuator") ||
+            path.contains("/error") ||
+            path.contains("/deliveries/calculate")) {
+            return true;
+        }
+
+        if ("GET".equalsIgnoreCase(method)) {
+            if (path.matches("^/tracking/\\d+$") ||
+                path.matches("^/deliveries/\\d+$") ||
+                path.matches("^/deliveries/\\d+/activities$")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isAdminPath(String path) {

@@ -5,10 +5,12 @@ import com.capg.auth.entity.User;
 import com.capg.auth.exception.InvalidCredentialsException;
 import com.capg.auth.exception.UserAlreadyExistsException;
 import com.capg.auth.exception.UserNotFoundException;
+import com.capg.auth.mapper.UserMapper;
 import com.capg.auth.repository.AuthRepository;
 import com.capg.auth.util.JwtUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,11 +44,8 @@ public class AuthService {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(encoder.encode(dto.getPassword()));
-        String role = dto.getRole();
-        if (role == null || role.trim().isEmpty()) {
-            role = "USER";
-        }
-        user.setRole(role.toUpperCase());
+        // Disallow self-assigning privileged roles on registration
+        user.setRole("USER");
 
         log.info("Registering new user: {} with role: {}", user.getUsername(), user.getRole());
         repo.save(user);
@@ -68,7 +67,9 @@ public class AuthService {
 
     }
     
-    public List<User> getAllUsers() {
-        return repo.findAll();
+    public List<UserDto> getAllUsers() {
+        return repo.findAll().stream()
+                .map(UserMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

@@ -29,6 +29,7 @@ public class SecurityConfig {
                             "/swagger-ui.html",
                             "/actuator/**"
                     ).permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/tracking/{deliveryId:[0-9]+}").permitAll()
             .anyRequest().authenticated())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

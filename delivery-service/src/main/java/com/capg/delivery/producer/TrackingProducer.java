@@ -1,6 +1,7 @@
 package com.capg.delivery.producer;
 
-import com.capg.delivery.event.TrackingEvent;
+import com.capg.delivery.config.RabbitMQConfig;
+import com.capg.delivery.dto.TrackingMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,11 @@ public class TrackingProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendTrackingEvent(TrackingEvent event) {
+    public void sendTrackingEvent(TrackingMessage message) {
         rabbitTemplate.convertAndSend(
-                "delivery-exchange",
-                "tracking.key",
-                event
+                RabbitMQConfig.EXCHANGE_NAME,
+                RabbitMQConfig.ROUTING_KEY,
+                message
         );
     }
 }

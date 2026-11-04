@@ -50,8 +50,8 @@ public class DeliveryController {
         return service.getAllDeliveriesDetailed();
     }
 
-    // USER → Get user deliveries
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    // USER → Get user deliveries (Restricted to self or admin)
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.name")
     @GetMapping("/user/{username}")
     public List<Response> getByUser(@PathVariable("username") String username) {
         return service.getDeliveriesBySender(username);
@@ -68,7 +68,8 @@ public class DeliveryController {
         return service.getActivities(id);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    // USER → Export user deliveries (Restricted to self or admin)
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.name")
     @GetMapping("/export/{username}")
     public org.springframework.http.ResponseEntity<byte[]> exportCsv(@PathVariable("username") String username) {
         String csv = service.exportShipmentsToCsv(username);

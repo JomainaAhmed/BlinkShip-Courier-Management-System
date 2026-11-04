@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 public class AdminDeliveryDto {
 
     private Long id;
+    private String username;
     private String status;
     private double price;
 

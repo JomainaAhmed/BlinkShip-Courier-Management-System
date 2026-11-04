@@ -38,9 +38,11 @@ public class SecurityConfig {
                         "/deliveries/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
-                        "/actuator/**"
+                        "/actuator/**",
+                        "/deliveries/calculate"
                 ).permitAll()
-
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/deliveries/{id:[0-9]+}").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/deliveries/{id:[0-9]+}/activities").permitAll()
                 .anyRequest().authenticated()
             )
 

@@ -15,7 +15,8 @@ public class DeliveryMapper {
         delivery.setSender(dto.getSender());
         delivery.setReceiver(dto.getReceiver());
         delivery.setPackageEntity(dto.getPackageDetails());
-        delivery.setStatus(DeliveryStatus.DRAFT);
+        delivery.setStatus(DeliveryStatus.BOOKED);
+        delivery.setBookedAt(java.time.Instant.now());
         return delivery;
     }
 
@@ -47,6 +48,7 @@ public class DeliveryMapper {
     public static AdminResponse toAdminDTO(Delivery d) {
         AdminResponse dto = new AdminResponse();
         dto.setId(d.getId());
+        dto.setUsername(d.getUsername());
         dto.setStatus(d.getStatus().name());
 
         if (d.getPackageEntity() != null) {

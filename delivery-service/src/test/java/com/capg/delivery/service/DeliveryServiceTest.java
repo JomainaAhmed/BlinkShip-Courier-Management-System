@@ -2,12 +2,14 @@ package com.capg.delivery.service;
 
 import com.capg.delivery.dto.Request;
 import com.capg.delivery.dto.Response;
+import com.capg.delivery.entity.Activity;
 import com.capg.delivery.entity.Delivery;
 import com.capg.delivery.entity.PackageEntity;
 import com.capg.delivery.enums.DeliveryStatus;
 import com.capg.delivery.exception.InvalidStatusException;
 import com.capg.delivery.repository.ActivityRepository;
 import com.capg.delivery.repository.DeliveryRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,16 +17,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +39,9 @@ public class DeliveryServiceTest {
     private DeliveryRepository repository;
 
     @Mock
+    private ActivityRepository activityRepository;
+
+    @Mock
     private RabbitTemplate rabbitTemplate;
 
     @InjectMocks
@@ -41,9 +49,15 @@ public class DeliveryServiceTest {
 
     private Request sampleRequest;
     private Delivery sampleDelivery;
+    private SecurityContext securityContext;
 
     @BeforeEach
     void setUp() {
+        securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        lenient().when(securityContext.getAuthentication())
+                .thenReturn(new UsernamePasswordAuthenticationToken("user", "pass", Collections.emptyList()));
+
         sampleRequest = new Request();
 
         com.capg.delivery.entity.Address sender = new com.capg.delivery.entity.Address();
@@ -71,8 +85,14 @@ public class DeliveryServiceTest {
 
         sampleDelivery = new Delivery();
         sampleDelivery.setId(1L);
+        sampleDelivery.setUsername("user");
         sampleDelivery.setStatus(DeliveryStatus.DRAFT);
         sampleDelivery.setPackageEntity(pkg);
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -92,16 +112,12 @@ public class DeliveryServiceTest {
         assertNotNull(response);
         assertEquals(600.0, response.getPrice());
         verify(repository, times(1)).save(any(Delivery.class));
+        verify(activityRepository, times(1)).save(any(Activity.class));
         verify(rabbitTemplate, times(1)).convertAndSend(anyString(), anyString(), any(Object.class));
     }
 
     @Test
     void testUpdateStatus_ValidTransition_User() {
-        SecurityContext context = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(context);
-        when(context.getAuthentication())
-                .thenReturn(new UsernamePasswordAuthenticationToken("user", "pass", Collections.emptyList()));
-
         when(repository.findById(1L)).thenReturn(Optional.of(sampleDelivery));
         when(repository.save(any(Delivery.class))).thenReturn(sampleDelivery);
 
@@ -109,15 +125,11 @@ public class DeliveryServiceTest {
 
         assertNotNull(response);
         assertEquals(DeliveryStatus.BOOKED, sampleDelivery.getStatus());
+        verify(activityRepository, times(1)).save(any(Activity.class));
     }
 
     @Test
     void testUpdateStatus_InvalidTransition_User() {
-        SecurityContext context = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(context);
-        when(context.getAuthentication())
-                .thenReturn(new UsernamePasswordAuthenticationToken("user", "pass", Collections.emptyList()));
-
         when(repository.findById(1L)).thenReturn(Optional.of(sampleDelivery));
 
         assertThrows(InvalidStatusException.class, () -> {
@@ -127,9 +139,7 @@ public class DeliveryServiceTest {
 
     @Test
     void testUpdateStatus_ValidTransition_Admin() {
-        SecurityContext context = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(context);
-        when(context.getAuthentication()).thenReturn(new UsernamePasswordAuthenticationToken("admin", "pass",
+        when(securityContext.getAuthentication()).thenReturn(new UsernamePasswordAuthenticationToken("admin", "pass",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
 
         when(repository.findById(1L)).thenReturn(Optional.of(sampleDelivery));
@@ -140,5 +150,34 @@ public class DeliveryServiceTest {
 
         assertNotNull(response);
         assertEquals(DeliveryStatus.DELIVERED, sampleDelivery.getStatus());
+        verify(activityRepository, times(1)).save(any(Activity.class));
+    }
+
+    @Test
+    void testGetDeliveriesBySender_AuthorizedSameUser() {
+        when(repository.findByUsername("user")).thenReturn(List.of(sampleDelivery));
+
+        List<Response> results = deliveryService.getDeliveriesBySender("user");
+        assertNotNull(results);
+        assertEquals(1, results.size());
+        verify(repository, times(1)).findByUsername("user");
+    }
+
+    @Test
+    void testGetDeliveriesBySender_UnauthorizedDifferentUser() {
+        assertThrows(AccessDeniedException.class, () -> {
+            deliveryService.getDeliveriesBySender("otherUser");
+        });
+    }
+
+    @Test
+    void testGetDeliveriesBySender_AuthorizedAdminUser() {
+        when(securityContext.getAuthentication()).thenReturn(new UsernamePasswordAuthenticationToken("admin", "pass",
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
+        when(repository.findByUsername("otherUser")).thenReturn(List.of(sampleDelivery));
+
+        List<Response> results = deliveryService.getDeliveriesBySender("otherUser");
+        assertNotNull(results);
+        assertEquals(1, results.size());
     }
 }

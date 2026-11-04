@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 public class AdminResponse {
 
     private Long id;
+    private String username;
     private String status;
     private double price;
 

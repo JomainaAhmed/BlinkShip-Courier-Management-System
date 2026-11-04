@@ -207,6 +207,15 @@ public class DeliveryService {
     }
 
     public List<Response> getDeliveriesBySender(String name) {
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            boolean isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (!isAdmin && !auth.getName().equalsIgnoreCase(name)) {
+                throw new org.springframework.security.access.AccessDeniedException(
+                        "Access denied: You are not authorized to view deliveries for user: " + name);
+            }
+        }
         return repository.findByUsername(name)
                 .stream()
                 .map(DeliveryMapper::toDTO)
@@ -277,18 +286,27 @@ public class DeliveryService {
         Path filePath = uploadPath.resolve(fileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // Log Activity
+        // Log Activity referencing actual stored filename
         activityRepository.save(Activity.builder()
                 .deliveryId(deliveryId)
                 .action("DOCUMENT_UPLOADED")
-                .details("New document uploaded: " + file.getOriginalFilename())
+                .details("New document uploaded: " + fileName)
                 .build());
 
         return fileName;
     }
 
     public byte[] getDocument(Long deliveryId, String fileName) throws java.io.IOException {
-        Path filePath = Paths.get("uploads", deliveryId.toString()).resolve(fileName);
+        Path uploadDir = Paths.get("uploads", deliveryId.toString());
+        Path filePath = uploadDir.resolve(fileName);
+        if (!Files.exists(filePath) && Files.exists(uploadDir)) {
+            try (var stream = Files.list(uploadDir)) {
+                filePath = stream
+                        .filter(p -> p.getFileName().toString().endsWith(fileName) || p.getFileName().toString().equals(fileName))
+                        .findFirst()
+                        .orElse(filePath);
+            }
+        }
         return Files.readAllBytes(filePath);
     }
 
