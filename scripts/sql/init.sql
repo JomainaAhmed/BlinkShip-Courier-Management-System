@@ -20,6 +20,11 @@ INSERT INTO users (username, email, password, role)
 VALUES ('admin', 'admin@blinkship.com', '$2a$10$iMtaq6Faaue3PxYdjv4fUOrOOnld5oUhONd6Gy8RpTvHfMmmiwlAa', 'ADMIN')
 ON CONFLICT (username) DO NOTHING;
 
+-- Insert driver/agent user (password is 'admin123' hashed with BCrypt)
+INSERT INTO users (username, email, password, role)
+VALUES ('driver', 'driver@blinkship.com', '$2a$10$iMtaq6Faaue3PxYdjv4fUOrOOnld5oUhONd6Gy8RpTvHfMmmiwlAa', 'DRIVER')
+ON CONFLICT (username) DO NOTHING;
+
 -- Insert user456 (password is '456456' hashed with BCrypt)
 INSERT INTO users (username, email, password, role)
 VALUES ('user456', 'user456@example.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.TVuHOn2', 'USER')

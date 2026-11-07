@@ -4,10 +4,11 @@ export interface User {
   email?: string;
   password?: string;
   role?: string;
-  name?: string; // Keep for compatibility if needed
+  name?: string;
 }
 
 export interface AuthResponse {
   token: string;
-  user: User;
+  refreshToken?: string;
+  user?: User;
 }

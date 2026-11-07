@@ -16,10 +16,33 @@ import java.util.Map;
 public class RabbitMQConfig {
 
     public static final String QUEUE_NAME = "tracking-queue";
+    public static final String DLQ_QUEUE_NAME = "tracking-queue.dlq";
+    public static final String DLQ_EXCHANGE_NAME = "delivery-exchange.dlx";
+    public static final String DLQ_ROUTING_KEY = "tracking.dlq.key";
+
+    @Bean
+    public DirectExchange deadLetterExchange() {
+        return new DirectExchange(DLQ_EXCHANGE_NAME);
+    }
+
+    @Bean
+    public Queue deadLetterQueue() {
+        return QueueBuilder.durable(DLQ_QUEUE_NAME).build();
+    }
+
+    @Bean
+    public Binding deadLetterBinding(Queue deadLetterQueue, DirectExchange deadLetterExchange) {
+        return BindingBuilder.bind(deadLetterQueue)
+                .to(deadLetterExchange)
+                .with(DLQ_ROUTING_KEY);
+    }
 
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE_NAME);
+        return QueueBuilder.durable(QUEUE_NAME)
+                .withArgument("x-dead-letter-exchange", DLQ_EXCHANGE_NAME)
+                .withArgument("x-dead-letter-routing-key", DLQ_ROUTING_KEY)
+                .build();
     }
 
     @Bean

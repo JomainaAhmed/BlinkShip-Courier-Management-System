@@ -8,6 +8,7 @@ import com.capg.auth.exception.UserNotFoundException;
 import com.capg.auth.mapper.UserMapper;
 import com.capg.auth.repository.AuthRepository;
 import com.capg.auth.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,9 +63,23 @@ public class AuthService {
 
         log.info("User {} logged in successfully", user.getUsername());
         String token = jwtUtil.generateToken(user.getEmail(), user.getUsername(), user.getRole());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getEmail(), user.getUsername(), user.getRole());
 
-        return new Response(token);
+        return new Response(token, refreshToken);
+    }
 
+    public Response refreshToken(String refreshToken) {
+        try {
+            Claims claims = jwtUtil.validateToken(refreshToken);
+            String email = claims.getSubject();
+            String username = claims.get("username").toString();
+            String role = claims.get("role").toString();
+            String newToken = jwtUtil.generateToken(email, username, role);
+            String newRefreshToken = jwtUtil.generateRefreshToken(email, username, role);
+            return new Response(newToken, newRefreshToken);
+        } catch (Exception e) {
+            throw new InvalidCredentialsException("Invalid or expired refresh token");
+        }
     }
     
     public List<UserDto> getAllUsers() {

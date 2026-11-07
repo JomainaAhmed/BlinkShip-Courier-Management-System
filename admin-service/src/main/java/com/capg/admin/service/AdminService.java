@@ -6,6 +6,7 @@ import com.capg.admin.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -22,11 +23,21 @@ public class AdminService {
 
     public DashboardDto getDashboard() {
         log.info("Generating admin dashboard data");
-        List<AdminDeliveryDto> deliveries = deliveryClient.getAllDeliveries();
+        List<AdminDeliveryDto> deliveries;
+        try {
+            deliveries = deliveryClient.getAllDeliveries();
+            if (deliveries == null) {
+                deliveries = Collections.emptyList();
+            }
+        } catch (Exception e) {
+            log.error("Failed to fetch deliveries from Delivery Service: {}. Returning empty dashboard fallback.", e.getMessage());
+            deliveries = Collections.emptyList();
+        }
 
         int total = deliveries.size();
         int draft = 0, booked = 0, packed = 0, dispatched = 0, pickedUp = 0, inTransit = 0, outForDelivery = 0, delivered = 0, delayed = 0, failed = 0, returned = 0;
         for (AdminDeliveryDto d : deliveries) {
+            if (d == null || d.getStatus() == null) continue;
             switch (d.getStatus()) {
                 case "DRAFT" -> draft++;
                 case "BOOKED" -> booked++;
@@ -63,28 +74,29 @@ public class AdminService {
     }
 
     public List<AdminDeliveryDto> getAllDeliveries() {
-        return deliveryClient.getAllDeliveries();
+        try {
+            List<AdminDeliveryDto> list = deliveryClient.getAllDeliveries();
+            return list != null ? list : Collections.emptyList();
+        } catch (Exception e) {
+            log.error("Error retrieving deliveries from DeliveryClient: {}", e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     public void resolve(Long id) {
-
         DeliveryDto delivery = deliveryClient.getDelivery(id);
         String current = delivery.getStatus();
         String next;
 
         switch (current) {
-
             case "DELAYED":
                 next = "IN_TRANSIT";
                 break;
-
             case "FAILED":
                 next = "RETURNED";
                 break;
-
             case "RETURNED":
                 throw new com.capg.admin.exception.CustomException("Cannot resolve returned delivery");
-
             default:
                 throw new com.capg.admin.exception.CustomException("Only exception states can be resolved");
         }
@@ -99,13 +111,22 @@ public class AdminService {
     }
 
     public ReportDto getReports() {
-
-        List<AdminDeliveryDto> deliveries = deliveryClient.getAllDeliveries();
+        List<AdminDeliveryDto> deliveries;
+        try {
+            deliveries = deliveryClient.getAllDeliveries();
+            if (deliveries == null) {
+                deliveries = Collections.emptyList();
+            }
+        } catch (Exception e) {
+            log.error("Failed to fetch deliveries for reports: {}. Returning empty report fallback.", e.getMessage());
+            deliveries = Collections.emptyList();
+        }
 
         int total = deliveries.size();
         int delivered = 0, failed = 0, delayed = 0;
 
         for (AdminDeliveryDto d : deliveries) {
+            if (d == null || d.getStatus() == null) continue;
             switch (d.getStatus()) {
                 case "DELIVERED" -> delivered++;
                 case "FAILED" -> failed++;
@@ -131,6 +152,12 @@ public class AdminService {
     }
 
     public List<UserDto> getAllUsers() {
-        return authClient.getAllUsers();
+        try {
+            List<UserDto> users = authClient.getAllUsers();
+            return users != null ? users : Collections.emptyList();
+        } catch (Exception e) {
+            log.error("Error retrieving users from AuthClient: {}", e.getMessage());
+            return Collections.emptyList();
+        }
     }
 }

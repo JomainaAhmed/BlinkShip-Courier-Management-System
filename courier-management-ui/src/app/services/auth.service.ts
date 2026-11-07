@@ -30,9 +30,26 @@ export class AuthService {
 
           
           localStorage.setItem('token', res.token);
+          if (res.refreshToken) {
+            localStorage.setItem('refreshToken', res.refreshToken);
+          }
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('role', user.role || 'USER');
           this.notificationService.addNotification(`Welcome back, ${user.username}!`, 'success');
+        }
+      })
+    );
+  }
+
+  refreshToken(): Observable<AuthResponse> {
+    const refreshToken = localStorage.getItem('refreshToken');
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, { refreshToken }).pipe(
+      tap(res => {
+        if (res && res.token) {
+          localStorage.setItem('token', res.token);
+          if (res.refreshToken) {
+            localStorage.setItem('refreshToken', res.refreshToken);
+          }
         }
       })
     );
@@ -54,6 +71,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     localStorage.removeItem('role');
   }

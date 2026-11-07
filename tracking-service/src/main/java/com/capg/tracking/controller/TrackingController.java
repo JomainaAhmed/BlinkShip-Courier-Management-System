@@ -12,6 +12,7 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -29,6 +30,12 @@ public class TrackingController {
     @GetMapping("/{deliveryId}")
     public List<Response> getTracking(@PathVariable("deliveryId") Long deliveryId) {
         return service.getTracking(deliveryId);
+    }
+
+    @Operation(summary = "Subscribe to live real-time tracking updates via Server-Sent Events (SSE)")
+    @GetMapping(value = "/{deliveryId}/live", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamTracking(@PathVariable("deliveryId") Long deliveryId) {
+        return service.subscribe(deliveryId);
     }
 
     @Operation(summary = "Upload a tracking document", description = "Uploads a file associated with a delivery ID")

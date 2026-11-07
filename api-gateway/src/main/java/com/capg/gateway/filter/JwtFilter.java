@@ -71,6 +71,7 @@ public class JwtFilter implements GlobalFilter {
 
         if (path.contains("/auth/signup") ||
             path.contains("/auth/login") ||
+            path.contains("/auth/refresh") ||
             path.contains("/v3/api-docs") ||
             path.contains("/swagger-ui") ||
             path.contains("/actuator") ||
@@ -81,6 +82,7 @@ public class JwtFilter implements GlobalFilter {
 
         if ("GET".equalsIgnoreCase(method)) {
             if (path.matches("^/tracking/\\d+$") ||
+                path.matches("^/tracking/\\d+/live$") ||
                 path.matches("^/deliveries/\\d+$") ||
                 path.matches("^/deliveries/\\d+/activities$")) {
                 return true;

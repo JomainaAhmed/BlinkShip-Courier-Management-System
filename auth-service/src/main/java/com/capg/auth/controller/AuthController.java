@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @EnableMethodSecurity
 @RestController
@@ -33,6 +34,15 @@ public class AuthController {
     @PostMapping("/login")
     public Response login(@Valid @RequestBody LoginRequest dto) {
         return service.login(dto);
+    }
+
+    @PostMapping("/refresh")
+    public Response refresh(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new IllegalArgumentException("refreshToken is required");
+        }
+        return service.refreshToken(refreshToken);
     }
 
     @SecurityRequirement(name = "bearerAuth")

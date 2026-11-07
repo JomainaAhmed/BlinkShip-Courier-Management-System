@@ -55,7 +55,12 @@ The system uses **Spring Cloud Config Server**.
 - **Lombok**: Reduced boilerplate code across all services.
 - **SLF4j Logging**: Console and File appenders enabled for all functional services.
 - **Jacoco**: Code coverage analysis integrated into the Maven build.
-- **Async Tracking**: Delivery updates are processed asynchronously via RabbitMQ.
+- **Async Tracking**: Delivery updates are processed asynchronously via RabbitMQ with Dead Letter Queue (DLQ) support.
+- **Real-Time Live Tracking**: Server-Sent Events (SSE) push updates in real-time to connected clients (`/tracking/{id}/live`).
+- **Token Lifecycle & Security**: Refresh token flow (`/auth/refresh`), externalized JWT secrets, path traversal defenses.
+- **Pagination & Sorting**: High-throughput paginated queries for deliveries (`/deliveries/paged`).
+- **Resilient Microservices**: Fault-tolerant fallback handling for inter-service Feign calls.
+- **CI/CD Automation**: GitHub Actions pipeline for automated builds, Jacoco coverage, and quality checks.
 
 ## API Documentation & Dashboards
 - **Swagger UI**: `http://localhost:8080/swagger-ui.html`

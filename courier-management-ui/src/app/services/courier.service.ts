@@ -104,4 +104,40 @@ export class CourierService {
       map(s => this.normalizeShipment(s))
     );
   }
+
+  getPaginatedShipments(page: number = 0, size: number = 10, sortBy: string = 'id', direction: string = 'desc'): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sortBy', sortBy)
+      .set('direction', direction);
+    return this.http.get<any>(`${this.apiUrl}/deliveries/paged`, { params });
+  }
+
+  subscribeLiveTracking(deliveryId: string): Observable<any> {
+    return new Observable(observer => {
+      const eventSource = new EventSource(`${this.apiUrl}/tracking/${deliveryId}/live`);
+      eventSource.addEventListener('INIT', (event: any) => {
+        try {
+          const data = JSON.parse(event.data);
+          observer.next({ type: 'INIT', data });
+        } catch (e) {
+          console.error(e);
+        }
+      });
+      eventSource.addEventListener('TRACKING_UPDATE', (event: any) => {
+        try {
+          const data = JSON.parse(event.data);
+          observer.next({ type: 'UPDATE', data });
+        } catch (e) {
+          console.error(e);
+        }
+      });
+      eventSource.onerror = (error) => {
+        eventSource.close();
+        observer.error(error);
+      };
+      return () => eventSource.close();
+    });
+  }
 }

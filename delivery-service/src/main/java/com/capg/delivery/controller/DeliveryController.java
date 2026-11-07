@@ -50,6 +50,17 @@ public class DeliveryController {
         return service.getAllDeliveriesDetailed();
     }
 
+    // ADMIN/USER → Get paginated deliveries
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/paged")
+    public org.springframework.data.domain.Page<Response> getDeliveriesPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return service.getDeliveriesPaged(page, size, sortBy, direction);
+    }
+
     // USER → Get user deliveries (Restricted to self or admin)
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.name")
     @GetMapping("/user/{username}")

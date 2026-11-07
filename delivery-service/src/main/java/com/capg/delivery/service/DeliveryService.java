@@ -108,13 +108,13 @@ public class DeliveryService {
             throw new InvalidStatusException("Invalid status value: " + status);
         }
 
-        boolean isAdmin = SecurityContextHolder.getContext()
+        boolean isPrivileged = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getAuthorities()
                 .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_DRIVER"));
 
-        if (!isValidTransition(delivery.getStatus(), newStatus, isAdmin)) {
+        if (!isValidTransition(delivery.getStatus(), newStatus, isPrivileged)) {
             throw new InvalidStatusException(
                     "Invalid status transition from " + delivery.getStatus() + " to " + newStatus);
         }
@@ -276,29 +276,65 @@ public class DeliveryService {
         return invoice.toString();
     }
 
+    public org.springframework.data.domain.Page<Response> getDeliveriesPaged(int page, int size, String sortField, String direction) {
+        org.springframework.data.domain.Sort sort = "desc".equalsIgnoreCase(direction)
+                ? org.springframework.data.domain.Sort.by(sortField).descending()
+                : org.springframework.data.domain.Sort.by(sortField).ascending();
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, sort);
+        return repository.findAll(pageable).map(DeliveryMapper::toDTO);
+    }
+
     public String uploadDocument(Long deliveryId, MultipartFile file) throws java.io.IOException {
-        Path uploadPath = Paths.get("uploads", deliveryId.toString());
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Cannot upload empty file");
+        }
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.contains("..") || originalFilename.contains("/") || originalFilename.contains("\\")) {
+            throw new IllegalArgumentException("Invalid file name");
+        }
+
+        int dotIndex = originalFilename.lastIndexOf(".");
+        if (dotIndex == -1) {
+            throw new IllegalArgumentException("File must have an extension");
+        }
+        String ext = originalFilename.substring(dotIndex).toLowerCase();
+        if (!java.util.List.of(".pdf", ".png", ".jpg", ".jpeg").contains(ext)) {
+            throw new IllegalArgumentException("Allowed file formats: PDF, PNG, JPG, JPEG");
+        }
+
+        Path uploadPath = Paths.get("uploads", deliveryId.toString()).normalize();
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
+        String safeFileName = UUID.randomUUID().toString() + "_" + Paths.get(originalFilename).getFileName().toString();
+        Path filePath = uploadPath.resolve(safeFileName).normalize();
+        if (!filePath.startsWith(uploadPath)) {
+            throw new SecurityException("Directory traversal detected");
+        }
+
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         // Log Activity referencing actual stored filename
         activityRepository.save(Activity.builder()
                 .deliveryId(deliveryId)
                 .action("DOCUMENT_UPLOADED")
-                .details("New document uploaded: " + fileName)
+                .details("New document uploaded: " + safeFileName)
                 .build());
 
-        return fileName;
+        return safeFileName;
     }
 
     public byte[] getDocument(Long deliveryId, String fileName) throws java.io.IOException {
-        Path uploadDir = Paths.get("uploads", deliveryId.toString());
-        Path filePath = uploadDir.resolve(fileName);
+        if (fileName == null || fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+            throw new SecurityException("Invalid file name or directory traversal detected");
+        }
+        Path uploadDir = Paths.get("uploads", deliveryId.toString()).normalize();
+        Path filePath = uploadDir.resolve(fileName).normalize();
+        if (!filePath.startsWith(uploadDir)) {
+            throw new SecurityException("Directory traversal detected");
+        }
+
         if (!Files.exists(filePath) && Files.exists(uploadDir)) {
             try (var stream = Files.list(uploadDir)) {
                 filePath = stream
@@ -306,6 +342,9 @@ public class DeliveryService {
                         .findFirst()
                         .orElse(filePath);
             }
+        }
+        if (!Files.exists(filePath)) {
+            throw new java.io.FileNotFoundException("File not found: " + fileName);
         }
         return Files.readAllBytes(filePath);
     }
