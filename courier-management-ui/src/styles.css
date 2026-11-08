@@ -12,7 +12,7 @@
   }
 
   html {
-    font-size: 112.5%; /* 18px base for better legibility */
+    font-size: 100%; /* Standard 16px base font size */
   }
 }
 
@@ -36,7 +36,7 @@
   }
 
   .blink-card:hover {
-    @apply -translate-y-2 border-primary/20 shadow-primary/10;
+    @apply -translate-y-1 border-primary/30 shadow-primary/10;
   }
 
   .btn-primary {
@@ -84,19 +84,19 @@
   }
 
   .heading-hero {
-    @apply text-5xl md:text-7xl font-black tracking-tighter leading-[1.1];
+    @apply text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.15];
     font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
   }
 
-  /* Section headings — Montserrat, bigger, bold */
+  /* Section headings — Montserrat, balanced, bold */
   .section-heading {
     font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
-    @apply text-3xl md:text-5xl font-black uppercase tracking-tight text-white;
+    @apply text-2xl md:text-4xl font-black uppercase tracking-tight text-white;
   }
 
   .section-label {
     font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
-    @apply text-sm font-bold text-white uppercase tracking-[0.5em] mb-6;
+    @apply text-xs font-bold text-primary uppercase tracking-[0.35em] mb-4;
   }
 }
 

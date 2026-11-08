@@ -4,30 +4,30 @@
 
   <!-- ===== HERO SECTION ===== -->
   <section
-    class="relative min-h-screen pt-32 flex flex-col items-center justify-center text-center px-8 overflow-hidden">
+    class="relative min-h-[85vh] pt-44 pb-20 flex flex-col items-center justify-center text-center px-6 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000"
         alt="Logistics Background" class="w-full h-full object-cover opacity-20 grayscale">
       <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
     </div>
     <div
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-primary/10 blur-[140px] rounded-full z-10 animate-fade-in">
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-primary/10 blur-[140px] rounded-full z-10 pointer-events-none animate-fade-in">
     </div>
 
-    <div class="relative z-20 animate-slide-up max-w-5xl">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full bg-primary/10 border border-primary/20">
+    <div class="relative z-20 animate-slide-up max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-primary/10 border border-primary/20">
         <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-        <span class="text-xs font-bold text-primary uppercase tracking-[0.3em]"
+        <span class="text-xs font-bold text-primary uppercase tracking-[0.25em]"
           style="font-family:'Montserrat',sans-serif;">Fast &amp; Reliable Courier Service</span>
       </div>
       <h1 class="heading-hero text-white mb-6">
         Seamless <span class="text-primary">Delivery</span> Solutions<br>for Everyone.
       </h1>
-      <p class="text-subtext text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
+      <p class="text-subtext text-base md:text-lg mb-10 max-w-2xl mx-auto leading-relaxed text-white/80">
         Shipping parcels across India has never been easier. Whether it's a personal gift or a business shipment, we've
         got you covered with smart technology and a commitment to excellence.
       </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-5 animate-slide-up animation-delay-300">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up animation-delay-300">
         <button routerLink="/book" class="btn-primary">Book a Delivery</button>
         <button routerLink="/services" class="btn-outline">Explore Services</button>
       </div>
@@ -35,10 +35,10 @@
   </section>
 
   <!-- ===== QUICK TRACK ===== -->
-  <section class="max-w-4xl mx-auto px-8 pb-24">
-    <div class="blink-card p-10 md:p-14 border-primary/20">
+  <section class="max-w-4xl mx-auto px-6 pt-10 pb-24 relative z-20">
+    <div class="blink-card p-8 md:p-12 border-primary/20">
       <p class="section-label text-center">Shipment Tracker</p>
-      <h2 class="section-heading text-center mb-10">Track Your Parcel</h2>
+      <h2 class="section-heading text-center mb-8">Track Your Parcel</h2>
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 relative group">
           <input type="text" [(ngModel)]="trackingId" placeholder="ENTER YOUR TRACKING ID HERE"
@@ -54,7 +54,7 @@
         </div>
         <button (click)="track()" class="btn-primary min-w-[180px]">Start Tracking</button>
       </div>
-      <p class="text-[10px] text-neutral/20 font-semibold uppercase tracking-widest mt-6 text-center"
+      <p class="text-[10px] text-neutral/40 font-semibold uppercase tracking-widest mt-6 text-center"
         style="font-family:'Montserrat',sans-serif;">Try: 2</p>
     </div>
   </section>
@@ -74,7 +74,7 @@
   <!-- ===== KEY FEATURES ===== -->
   <section class="max-w-7xl mx-auto px-8 pb-24">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="blink-card p-12 group">
+      <div class="blink-card p-8 md:p-10 group">
         <div
           class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,7 +87,7 @@
         <p class="text-subtext text-sm">Follow your package at every step with timeline tracking and instant status
           notifications.</p>
       </div>
-      <div class="blink-card p-12 group">
+      <div class="blink-card p-8 md:p-10 group">
         <div
           class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,7 +99,7 @@
         <p class="text-subtext text-sm">Priority routing ensures your critical shipments reach their destination with
           unmatched speed</p>
       </div>
-      <div class="blink-card p-12 group">
+      <div class="blink-card p-8 md:p-10 group">
         <div
           class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-black transition-all duration-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -164,7 +164,7 @@
     <p class="section-label text-center">Happy Customers</p>
     <h2 class="section-heading text-center mb-16">Real Stories, Real Deliveries</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="blink-card p-12">
+      <div class="blink-card p-8 md:p-10">
         <div class="flex items-center gap-4 mb-8">
           <div
             class="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black text-sm"
@@ -184,7 +184,7 @@
           and my customers love the fast delivery times!"
         </p>
       </div>
-      <div class="blink-card p-12">
+      <div class="blink-card p-8 md:p-10">
         <div class="flex items-center gap-4 mb-8">
           <div
             class="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black text-sm"
