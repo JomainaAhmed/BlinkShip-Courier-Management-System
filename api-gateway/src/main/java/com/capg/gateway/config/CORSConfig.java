@@ -1,12 +1,29 @@
 package com.capg.gateway.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-/**
- * CORS is declaratively configured via application.properties / Spring Cloud Gateway
- * globalcors configuration to prevent dual CORS definitions and invalid wildcard credentials.
- */
+import java.util.Arrays;
+import java.util.Collections;
+
 @Configuration
 public class CORSConfig {
-    // Programmatic CorsWebFilter removed in favor of standard declarative gateway globalcors configuration
+
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsWebFilter(source);
+    }
 }

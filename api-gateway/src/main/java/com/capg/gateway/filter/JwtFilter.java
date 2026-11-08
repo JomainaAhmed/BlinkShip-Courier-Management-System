@@ -25,7 +25,7 @@ public class JwtFilter implements GlobalFilter {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        if (isPublicEndpoint(exchange)) {
+        if (exchange.getRequest().getMethod().name().equalsIgnoreCase("OPTIONS") || isPublicEndpoint(exchange)) {
             return chain.filter(exchange);
         }
 
